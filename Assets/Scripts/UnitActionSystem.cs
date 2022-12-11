@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -5,6 +6,24 @@ public class UnitActionSystem : MonoBehaviour
 {
     [SerializeField] private Unit _selectedUnit;
     [SerializeField] private LayerMask _unitLayerMask;
+
+    public static UnitActionSystem Instance { get; private set; }
+    public event EventHandler OnSelectedUnitChanged;
+
+    public Unit SelectedUnit
+    {
+        get => _selectedUnit;
+        private set
+        {
+            _selectedUnit = value;
+            OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
+        } 
+    }
+
+    private void Awake()
+    {
+        Instance ??= this;
+    }
 
     private void Update()
     {
@@ -22,7 +41,7 @@ public class UnitActionSystem : MonoBehaviour
         {
             if (hit.collider.gameObject.TryGetComponent(out Unit unit))
             {
-                _selectedUnit = unit;
+                SelectedUnit = unit;
                 return true;
             }
         }
