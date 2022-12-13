@@ -30,5 +30,7 @@ namespace Grid
         public void AddUnit(Unit unit) => _units.Add(unit);
         public void RemoveUnit(Unit unit) => _units.Remove(unit);
         public List<Unit> GetUnitList() => _units;
+
+        public bool HasAnyUnit() => _units.Count > 0;
     }
 }

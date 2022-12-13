@@ -1,4 +1,5 @@
 using System;
+using Grid;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -29,11 +30,13 @@ namespace UnitBased
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown((int) MouseButton.Left))
-            {
-                if (!TryHandleUnitSelection())
-                    _selectedUnit.Move(MouseWorld.GetPosition());
-            }
+            if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return;
+            if (TryHandleUnitSelection()) return;
+
+            GridPosition mouseGridPosition =
+                LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+            if(_selectedUnit.MoveAction.IsValidActionGridPosition(mouseGridPosition))
+                 _selectedUnit.MoveAction.Move(mouseGridPosition);
         }
 
         private bool TryHandleUnitSelection()

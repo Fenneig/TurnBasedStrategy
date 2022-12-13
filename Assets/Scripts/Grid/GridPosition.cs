@@ -36,5 +36,8 @@ namespace Grid
         {
             return HashCode.Combine(X, Z);
         }
+
+        public static GridPosition operator +(GridPosition a, GridPosition b) => new(a.X + b.X, a.Z + b.Z);
+        public static GridPosition operator -(GridPosition a, GridPosition b) => new(a.X - b.X, a.Z - b.Z);
     }
 }

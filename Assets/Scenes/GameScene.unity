@@ -201,7 +201,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.3006394, y: 0.000000016410379, z: -0.0000000051729154, w: 0.9537379}
+  m_LocalRotation: {x: 0.3006394, y: -0.000000016410379, z: 0.0000000051729154, w: 0.9537379}
   m_LocalPosition: {x: 0, y: 7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -468,6 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa15d14e7544fd88f2a3e4659c95ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unit: {fileID: 1512138419}
 --- !u!4 &510757215
 Transform:
   m_ObjectHideFlags: 0
@@ -772,7 +773,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671342538}
-  m_LocalRotation: {x: 0.3006394, y: 0.000000016410379, z: -0.0000000051729154, w: 0.9537379}
+  m_LocalRotation: {x: 0.3006394, y: -0.000000016410379, z: 0.0000000051729154, w: 0.9537379}
   m_LocalPosition: {x: 0, y: 7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1060,6 +1061,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4834841786391868674, guid: 15cba7fd18c7c484fbb329096f88f572,
+        type: 3}
+      propertyPath: _maxMoveDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6501140434225576092, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
       propertyPath: m_Name
@@ -1073,7 +1079,7 @@ PrefabInstance:
     - target: {fileID: 6501140434225576095, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.79
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6501140434225576095, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
@@ -1083,7 +1089,7 @@ PrefabInstance:
     - target: {fileID: 6501140434225576095, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.88
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6501140434225576095, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
@@ -1174,6 +1180,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4834841786391868674, guid: 15cba7fd18c7c484fbb329096f88f572,
+        type: 3}
+      propertyPath: _maxMoveDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6501140434225576092, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
       propertyPath: m_Name
