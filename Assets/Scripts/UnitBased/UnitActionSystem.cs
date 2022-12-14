@@ -10,6 +10,8 @@ namespace UnitBased
         [SerializeField] private Unit _selectedUnit;
         [SerializeField] private LayerMask _unitLayerMask;
 
+        private bool _isBusy;
+
         public static UnitActionSystem Instance { get; private set; }
         public event EventHandler OnSelectedUnitChanged;
 
@@ -20,7 +22,7 @@ namespace UnitBased
             {
                 _selectedUnit = value;
                 OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
-            } 
+            }
         }
 
         private void Awake()
@@ -30,13 +32,25 @@ namespace UnitBased
 
         private void Update()
         {
-            if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return;
-            if (TryHandleUnitSelection()) return;
+            if (_isBusy) return;
+            if (Input.GetMouseButtonDown((int) MouseButton.Left))
+            {
+                if (TryHandleUnitSelection()) return;
 
-            GridPosition mouseGridPosition =
-                LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-            if(_selectedUnit.MoveAction.IsValidActionGridPosition(mouseGridPosition))
-                 _selectedUnit.MoveAction.Move(mouseGridPosition);
+                GridPosition mouseGridPosition =
+                    LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+                if (_selectedUnit.MoveAction.IsValidActionGridPosition(mouseGridPosition))
+                {
+                    SetBusy();
+                    _selectedUnit.MoveAction.Move(mouseGridPosition, ClearBusy);
+                }
+            }
+
+            if (Input.GetMouseButtonDown((int) MouseButton.Right))
+            {
+                SetBusy();
+                _selectedUnit.SpinAction.Spin(ClearBusy);
+            }
         }
 
         private bool TryHandleUnitSelection()
@@ -50,8 +64,12 @@ namespace UnitBased
                     return true;
                 }
             }
-
             return false;
         }
+
+        private void SetBusy() => _isBusy = true;
+
+
+        private void ClearBusy() => _isBusy = false;
     }
 }

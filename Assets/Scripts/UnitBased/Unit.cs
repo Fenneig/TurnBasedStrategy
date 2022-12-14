@@ -7,30 +7,30 @@ namespace UnitBased
     [RequireComponent(typeof(MoveAction))]
     public class Unit : MonoBehaviour
     {
-        private MoveAction _moveAction;
-        private GridPosition _gridPosition;
+        public GridPosition GridPosition { get; private set; }
 
-        public GridPosition GridPosition => _gridPosition;
+        public MoveAction MoveAction { get; private set; }
 
-        public MoveAction MoveAction => _moveAction;
+        public SpinAction SpinAction { get; private set; }
 
         private void Awake()
         {
-            _moveAction = GetComponent<MoveAction>();
+            MoveAction = GetComponent<MoveAction>();
+            SpinAction = GetComponent<SpinAction>();
         }
 
         private void Start()
         {
-            _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
+            GridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+            LevelGrid.Instance.AddUnitAtGridPosition(GridPosition, this);
         }
 
         private void Update()
         {
             var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            if (newGridPosition == _gridPosition) return;
-            LevelGrid.Instance.UnitMovedGridPosition(this, _gridPosition, newGridPosition);
-            _gridPosition = newGridPosition;
+            if (newGridPosition == GridPosition) return;
+            LevelGrid.Instance.UnitMovedGridPosition(this, GridPosition, newGridPosition);
+            GridPosition = newGridPosition;
         }
     }
 }
