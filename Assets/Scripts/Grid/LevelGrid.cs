@@ -9,6 +9,9 @@ namespace Grid
         [SerializeField] private Transform _gridDebugObjectPrefab;
         private GridSystem _gridSystem;
 
+        public int Widht => _gridSystem.Width;
+        public int Height => _gridSystem.Height;
+
         public static LevelGrid Instance { get; private set; }
 
         private void Awake()

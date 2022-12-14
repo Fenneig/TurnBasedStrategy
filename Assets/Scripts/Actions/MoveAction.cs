@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Grid;
 using UnityEngine;
-using Unit = UnitBased.Unit;
+using UnitBased;
 
 namespace Actions
 {

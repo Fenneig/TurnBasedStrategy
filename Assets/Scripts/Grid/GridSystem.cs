@@ -10,6 +10,9 @@ namespace Grid
         private readonly float _cellSize;
         private GridObject[,] _gridObjectArray;
 
+        public int Width => _width;
+        public int Height => _height;
+
         public GridSystem(int width, int height, float cellSize)
         {
             _width = width;
