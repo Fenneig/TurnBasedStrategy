@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Actions;
 using UnitBased;
 using UnityEngine;
 
@@ -58,7 +59,8 @@ namespace Grid
         public void UpdateGridVisual()
         {
             HideAllGridPosition();
-            ShowGridPositionList(UnitActionSystem.Instance.SelectedUnit.MoveAction.GetValidActionGridPositionList());
+            BaseAction selectedAction = UnitActionSystem.Instance.SelectedAction;
+            ShowGridPositionList(selectedAction.GetValidActionGridPositionList());
         }
     }
 }

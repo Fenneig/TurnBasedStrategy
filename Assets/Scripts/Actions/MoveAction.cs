@@ -51,17 +51,14 @@ namespace Actions
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
         }
 
-        public void Move(GridPosition targetPosition, Action onActionComplete)
+        public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
         {
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
             IsActive = true;
             OnActionComplete = onActionComplete;
         }
 
-        public bool IsValidActionGridPosition(GridPosition gridPosition) =>
-            GetValidActionGridPositionList().Contains(gridPosition);
-
-        public List<GridPosition> GetValidActionGridPositionList()
+        public override List<GridPosition> GetValidActionGridPositionList()
         {
             List<GridPosition> validGridPositionList = new List<GridPosition>();
             GridPosition unitGridPosition = Unit.GridPosition;
