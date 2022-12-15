@@ -12,11 +12,23 @@ namespace UnitBased
         [SerializeField] private Unit _selectedUnit;
         [SerializeField] private LayerMask _unitLayerMask;
 
-        public BaseAction SelectedAction { get; set; }
+        private BaseAction _selectedAction;
+
+        public BaseAction SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
         private bool _isBusy;
 
         public static UnitActionSystem Instance { get; private set; }
         public event EventHandler OnSelectedUnitChanged;
+        public event EventHandler OnSelectedActionChanged;
 
         public Unit SelectedUnit
         {
@@ -53,7 +65,7 @@ namespace UnitBased
         private bool TryHandleUnitSelection()
         {
             if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return false;
-            
+
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _unitLayerMask))
             {
