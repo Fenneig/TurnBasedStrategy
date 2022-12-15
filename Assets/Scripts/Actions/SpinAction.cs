@@ -28,5 +28,10 @@ namespace Actions
             _totalSpinAmount = 0f;
             OnActionComplete = onActionComplete;
         }
+
+        public override string GetActionName()
+        {
+            return "Spin";
+        }
     }
 }

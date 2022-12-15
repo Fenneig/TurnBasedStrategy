@@ -21,6 +21,11 @@ namespace Actions
             _targetPosition = transform.position;
         }
 
+        public override string GetActionName()
+        {
+            return "Move";
+        }
+
         private void Update()
         {
             if (!IsActive) return;

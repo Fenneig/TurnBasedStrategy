@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace UnitBased
 {
-    [RequireComponent(typeof(MoveAction))]
     public class Unit : MonoBehaviour
     {
         public GridPosition GridPosition { get; private set; }
@@ -12,11 +11,13 @@ namespace UnitBased
         public MoveAction MoveAction { get; private set; }
 
         public SpinAction SpinAction { get; private set; }
+        public BaseAction[] BaseActions { get; private set; }
 
         private void Awake()
         {
             MoveAction = GetComponent<MoveAction>();
             SpinAction = GetComponent<SpinAction>();
+            BaseActions = GetComponents<BaseAction>();
         }
 
         private void Start()
