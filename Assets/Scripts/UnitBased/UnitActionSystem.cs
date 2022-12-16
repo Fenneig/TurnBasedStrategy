@@ -25,10 +25,22 @@ namespace UnitBased
         }
 
         private bool _isBusy;
+        private bool IsBusy
+        {
+            set
+            {
+                _isBusy = value;
+                OnBusyChanged?.Invoke(this, _isBusy);
+            }
+        }
+        
+        
 
         public static UnitActionSystem Instance { get; private set; }
         public event EventHandler OnSelectedUnitChanged;
         public event EventHandler OnSelectedActionChanged;
+        public event EventHandler OnActionStart;
+        public event EventHandler<bool> OnBusyChanged;
 
         public Unit SelectedUnit
         {
@@ -82,20 +94,16 @@ namespace UnitBased
 
         private void HandleSelectedAction()
         {
-            if (Input.GetMouseButtonDown((int) MouseButton.Left))
-            {
-                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-                if (SelectedAction.IsValidActionGridPosition(mouseGridPosition))
-                {
-                    SetBusy();
-                    SelectedAction.TakeAction(mouseGridPosition, ClearBusy);
-                }
-            }
+            if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return;
+            
+            GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+            if (!SelectedAction.IsValidActionGridPosition(mouseGridPosition)) return;
+            
+            if (!SelectedUnit.TrySpendActionPointsToTakeAction(SelectedAction)) return;
+           
+            IsBusy = true;
+            OnActionStart?.Invoke(this, EventArgs.Empty);
+            SelectedAction.TakeAction(mouseGridPosition, () => IsBusy = false);
         }
-
-        private void SetBusy() => _isBusy = true;
-
-
-        private void ClearBusy() => _isBusy = false;
     }
 }

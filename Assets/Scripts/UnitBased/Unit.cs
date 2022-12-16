@@ -12,12 +12,14 @@ namespace UnitBased
 
         public SpinAction SpinAction { get; private set; }
         public BaseAction[] BaseActions { get; private set; }
+        public int ActionPoints { get; set; }
 
         private void Awake()
         {
             MoveAction = GetComponent<MoveAction>();
             SpinAction = GetComponent<SpinAction>();
             BaseActions = GetComponents<BaseAction>();
+            ActionPoints = 2;
         }
 
         private void Start()
@@ -33,5 +35,23 @@ namespace UnitBased
             LevelGrid.Instance.UnitMovedGridPosition(this, GridPosition, newGridPosition);
             GridPosition = newGridPosition;
         }
+
+        public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
+        {
+            if (CanSpendActionPointToTakeAction(baseAction))
+            {
+                SpendActionPoints(baseAction.GetActionPointsCost());
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CanSpendActionPointToTakeAction(BaseAction baseAction) =>
+            ActionPoints >= baseAction.GetActionPointsCost();
+
+
+        private void SpendActionPoints(int amount) => 
+            ActionPoints -= amount;
     }
 }

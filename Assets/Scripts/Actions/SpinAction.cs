@@ -39,5 +39,10 @@ namespace Actions
         {
             return "Spin";
         }
+
+        public override int GetActionPointsCost()
+        {
+            return 2;
+        }
     }
 }
