@@ -56,5 +56,8 @@ namespace Grid
 
         public bool HasAnyUnit(GridPosition gridPosition) =>
             _gridSystem.GetGridObject(gridPosition).HasAnyUnit();
+
+        public Unit GetUnitAtGridPosition(GridPosition gridPosition) =>
+            _gridSystem.GetGridObject(gridPosition).GetUnit();
     }
 }

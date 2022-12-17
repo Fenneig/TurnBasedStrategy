@@ -43,8 +43,7 @@ namespace Actions
             else
             {
                 _unitAnimator.SetBool(IsWalking, false);
-                IsActive = false;
-                OnActionComplete?.Invoke();
+                ActionComplete();
             }
             
             float rotateSpeed = 10f;
@@ -53,9 +52,9 @@ namespace Actions
 
         public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
         {
+            ActionStart(onActionComplete);
+            
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
-            IsActive = true;
-            OnActionComplete = onActionComplete;
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()
@@ -71,6 +70,7 @@ namespace Actions
                     GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition) ||
                         LevelGrid.Instance.HasAnyUnit(testGridPosition)) continue;
+                    
                     validGridPositionList.Add(testGridPosition);
                 }
             }

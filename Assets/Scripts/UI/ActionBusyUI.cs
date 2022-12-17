@@ -7,11 +7,11 @@ namespace UI
     {
         private void Start()
         {
-            UnitActionSystem.Instance.OnBusyChanged += OnBusyChanged;
+            UnitActionSystem.Instance.OnBusyChanged += UnitActionSystem_OnBusyChanged;
             Hide();
         }
 
-        private void OnBusyChanged(object sender, bool isBusy)
+        private void UnitActionSystem_OnBusyChanged(object sender, bool isBusy)
         {
             if (isBusy) Show();
             else Hide();
@@ -29,7 +29,7 @@ namespace UI
 
         private void OnDestroy()
         {
-            UnitActionSystem.Instance.OnBusyChanged -= OnBusyChanged;
+            UnitActionSystem.Instance.OnBusyChanged -= UnitActionSystem_OnBusyChanged;
         }
     }
 }

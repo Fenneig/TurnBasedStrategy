@@ -16,18 +16,18 @@ namespace UnitBased
 
         private void Start()
         {
-            UnitActionSystem.Instance.OnSelectedUnitChanged += OnSelectedUnitChanged;
+            UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
             UpdateVisual();
         }
 
-        private void OnSelectedUnitChanged(object sender, EventArgs empty) => UpdateVisual();
+        private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs empty) => UpdateVisual();
 
         private void UpdateVisual() =>
             _meshRenderer.enabled = UnitActionSystem.Instance.SelectedUnit == _unit;
 
         private void OnDestroy()
         {
-            UnitActionSystem.Instance.OnSelectedUnitChanged -= OnSelectedUnitChanged;
+            UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;
         }
     }
 }

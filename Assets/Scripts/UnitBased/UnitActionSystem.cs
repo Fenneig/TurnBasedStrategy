@@ -66,9 +66,8 @@ namespace UnitBased
         private void Update()
         {
             if (_isBusy) return;
-
+            if (!TurnSystem.Instance.IsPlayerTurn) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
-
             if (TryHandleUnitSelection()) return;
 
             HandleSelectedAction();
@@ -77,33 +76,25 @@ namespace UnitBased
         private bool TryHandleUnitSelection()
         {
             if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return false;
-
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _unitLayerMask))
-            {
-                if (hit.collider.gameObject.TryGetComponent(out Unit unit))
-                {
-                    if (SelectedUnit == unit) return false;
-                    SelectedUnit = unit;
-                    return true;
-                }
-            }
+            if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _unitLayerMask)) return false;
+            if (!hit.collider.gameObject.TryGetComponent(out Unit unit)) return false;
+            if (unit.IsEnemy) return false; 
+            if (SelectedUnit == unit) return false;
 
-            return false;
-        }
+            SelectedUnit = unit;
+            return true;
+        } 
 
         private void HandleSelectedAction()
         {
             if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return;
-            
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
             if (!SelectedAction.IsValidActionGridPosition(mouseGridPosition)) return;
-            
             if (!SelectedUnit.TrySpendActionPointsToTakeAction(SelectedAction)) return;
-           
             IsBusy = true;
+            SelectedAction.TakeAction(mouseGridPosition, () => IsBusy = false); 
             OnActionStart?.Invoke(this, EventArgs.Empty);
-            SelectedAction.TakeAction(mouseGridPosition, () => IsBusy = false);
         }
     }
 }

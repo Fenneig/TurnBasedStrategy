@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class ActionSystemUI : MonoBehaviour
+    public class UnitActionSystemUI : MonoBehaviour
     {
         [SerializeField] private Transform _actionButtonPrefab;
         [SerializeField] private Transform _actionButtonContainerTransform;
@@ -21,26 +21,37 @@ namespace UI
 
         private void Start()
         {
-            UnitActionSystem.Instance.OnSelectedUnitChanged += OnSelectedUnitChanged;
-            UnitActionSystem.Instance.OnSelectedActionChanged += OnSelectedActionChanged;
-            UnitActionSystem.Instance.OnActionStart += OnActionStart;
+            UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
+            UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
+            UnitActionSystem.Instance.OnActionStart += UnitActionSystem_OnActionStart;
+            TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+            Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
+
             CreateUnitActionButtons();
             UpdateActionPoints();
         }
 
-        private void OnSelectedUnitChanged(object sender, EventArgs empty)
+        private void Unit_OnAnyActionPointsChanged(object sender, EventArgs empty) =>
+            UpdateActionPoints();
+
+        private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
+        {
+            UpdateActionPoints();
+        }
+
+        private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs empty)
         {
             CreateUnitActionButtons();
             UpdateActionPoints();
         }
 
-        private void OnSelectedActionChanged(object sender, EventArgs empty)
+        private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs empty)
         {
             UpdateSelectedVisual();
         }
 
-        private void OnActionStart(object sender, EventArgs empty) => UpdateActionPoints();
-        
+        private void UnitActionSystem_OnActionStart(object sender, EventArgs empty) => UpdateActionPoints();
+
         private void CreateUnitActionButtons()
         {
             _actionButtonUIList.Clear();
@@ -71,9 +82,10 @@ namespace UI
 
         private void OnDestroy()
         {
-            UnitActionSystem.Instance.OnSelectedUnitChanged -= OnSelectedUnitChanged;
-            UnitActionSystem.Instance.OnSelectedActionChanged -= OnSelectedActionChanged; 
-            UnitActionSystem.Instance.OnActionStart -= OnActionStart;
+            UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;
+            UnitActionSystem.Instance.OnSelectedActionChanged -= UnitActionSystem_OnSelectedActionChanged;
+            UnitActionSystem.Instance.OnActionStart -= UnitActionSystem_OnActionStart;
+            TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
         }
 
         private void UpdateActionPoints()

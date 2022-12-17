@@ -9,8 +9,6 @@ namespace Grid
         private GridPosition _gridPosition;
         private List<Unit> _units;
 
-        public Unit Unit { get; set; }
-
         public GridObject(GridSystem gridSystem, GridPosition gridPosition)
         {
             _gridSystem = gridSystem;
@@ -32,5 +30,10 @@ namespace Grid
         public List<Unit> GetUnitList() => _units;
 
         public bool HasAnyUnit() => _units.Count > 0;
+
+        public Unit GetUnit()
+        {
+            return HasAnyUnit() ? _units[0] : null;
+        }
     }
 }

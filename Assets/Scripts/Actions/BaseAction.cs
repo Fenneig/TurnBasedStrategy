@@ -32,6 +32,18 @@ namespace Actions
             return 1;
         }
 
+        protected void ActionStart(Action onActionComplete)
+        {
+            IsActive = true;
+            OnActionComplete = onActionComplete;
+        }
+        
+        protected void ActionComplete()
+        {
+            IsActive = false;
+            OnActionComplete();
+        }
+
 
     }
 }
