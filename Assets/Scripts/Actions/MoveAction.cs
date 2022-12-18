@@ -10,6 +10,9 @@ namespace Actions
         [SerializeField] private Animator _unitAnimator;
         [SerializeField] private int _maxMoveDistance = 4;
 
+        public event EventHandler OnStartMoving;
+        public event EventHandler OnStopMoving;
+        
         private Vector3 _targetPosition;
 
         private static readonly int IsWalking = Animator.StringToHash("IsWalking");
@@ -37,12 +40,10 @@ namespace Actions
             { 
                 float moveSpeed = 4f;
                 transform.position += moveDirection * Time.deltaTime * moveSpeed;
-
-                _unitAnimator.SetBool(IsWalking, true);
             }
             else
             {
-                _unitAnimator.SetBool(IsWalking, false);
+                OnStopMoving?.Invoke(this,EventArgs.Empty);
                 ActionComplete();
             }
             
@@ -55,6 +56,8 @@ namespace Actions
             ActionStart(onActionComplete);
             
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
+            
+            OnStartMoving?.Invoke(this, EventArgs.Empty);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()

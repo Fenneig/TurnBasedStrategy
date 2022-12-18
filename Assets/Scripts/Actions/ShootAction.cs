@@ -8,6 +8,12 @@ namespace Actions
 {
     public class ShootAction : BaseAction
     {
+        public class OnShootEventArgs : EventArgs
+        {
+            public Unit TargetUnit;
+            public Unit ShootingUnit;
+        }
+
         private enum State
         {
             Aiming,
@@ -20,7 +26,8 @@ namespace Actions
         private float _stateTimer;
         private Unit _targetUnit;
         private bool _canShootBullet;
-        private Vector3 _preShootForward;
+
+        public event EventHandler<OnShootEventArgs> OnShoot;
 
         private void Update()
         {
@@ -40,12 +47,12 @@ namespace Actions
                         Shoot();
                         _canShootBullet = false;
                     }
+
                     break;
                 case State.Cooloff:
-                    transform.forward = Vector3.Lerp(transform.forward, _preShootForward, Time.deltaTime * rotateSpeed);
                     break;
             }
-            
+
             if (_stateTimer <= 0f) NextState();
         }
 
@@ -71,6 +78,11 @@ namespace Actions
 
         private void Shoot()
         {
+            OnShoot?.Invoke(this, new OnShootEventArgs
+            {
+                TargetUnit = _targetUnit,
+                ShootingUnit = Unit
+            });
             _targetUnit.Damage();
         }
 
@@ -82,13 +94,12 @@ namespace Actions
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {
             ActionStart(onActionComplete);
-            
+
             _targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
             _state = State.Aiming;
             float aimingStateTime = 1f;
             _stateTimer = aimingStateTime;
             _canShootBullet = true;
-            _preShootForward = Unit.transform.forward;
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()
