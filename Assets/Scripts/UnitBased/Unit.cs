@@ -11,7 +11,8 @@ namespace UnitBased
         [SerializeField] private bool _isEnemy;
 
         public static event EventHandler OnAnyActionPointsChanged;
-        
+
+        public HealthComponent Health { get; private set; }
         public GridPosition GridPosition { get; private set; }
         public MoveAction MoveAction { get; private set; }
         public SpinAction SpinAction { get; private set; }
@@ -25,6 +26,7 @@ namespace UnitBased
             MoveAction = GetComponent<MoveAction>();
             SpinAction = GetComponent<SpinAction>();
             BaseActions = GetComponents<BaseAction>();
+            Health = GetComponent<HealthComponent>();
             ActionPoints = 2;
         }
 
@@ -33,6 +35,7 @@ namespace UnitBased
             GridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
             LevelGrid.Instance.AddUnitAtGridPosition(GridPosition, this);
             TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+            Health.OnDead += HealthComponent_OnDead;
         }
 
         private void Update()
@@ -65,6 +68,11 @@ namespace UnitBased
             OnAnyActionPointsChanged?.Invoke(this,EventArgs.Empty);
         }
 
+        private void HealthComponent_OnDead(object sender, EventArgs args)
+        {
+            LevelGrid.Instance.RemoveUnitAtGridPosition(GridPosition, this);
+            Destroy(gameObject);
+        }
         private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
         {
             if (IsEnemy && !TurnSystem.Instance.IsPlayerTurn ||
@@ -81,9 +89,9 @@ namespace UnitBased
             TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
         }
 
-        public void Damage()
+        public void Damage(int damageAmount)
         {
-            Debug.Log(transform + " damaged");
+            Health.Damage(damageAmount);
         }
 
         public Vector3 GetWorldPosition() => 

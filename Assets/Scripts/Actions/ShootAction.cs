@@ -33,12 +33,12 @@ namespace Actions
         {
             if (!IsActive) return;
             _stateTimer -= Time.deltaTime;
-            Vector3 aimDirection = (_targetUnit.GetWorldPosition() - Unit.GetWorldPosition()).normalized;
             float rotateSpeed = 10f;
 
             switch (_state)
             {
                 case State.Aiming:
+                    Vector3 aimDirection = (_targetUnit.GetWorldPosition() - Unit.GetWorldPosition()).normalized;
                     transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
                     break;
                 case State.Shooting:
@@ -47,7 +47,6 @@ namespace Actions
                         Shoot();
                         _canShootBullet = false;
                     }
-
                     break;
                 case State.Cooloff:
                     break;
@@ -83,7 +82,8 @@ namespace Actions
                 TargetUnit = _targetUnit,
                 ShootingUnit = Unit
             });
-            _targetUnit.Damage();
+            int damageAmount = 40;
+            _targetUnit.Damage(damageAmount);
         }
 
         public override string GetActionName()
