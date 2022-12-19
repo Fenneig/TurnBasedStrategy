@@ -21,7 +21,8 @@ namespace Actions
             Cooloff
         }
 
-        private int _maxShootDistance = 7;
+        [SerializeField] private int _maxShootDistance = 7;
+        [SerializeField] private int _damageAmount = 40;
         private State _state;
         private float _stateTimer;
         private Unit _targetUnit;
@@ -47,6 +48,7 @@ namespace Actions
                         Shoot();
                         _canShootBullet = false;
                     }
+
                     break;
                 case State.Cooloff:
                     break;
@@ -82,8 +84,8 @@ namespace Actions
                 TargetUnit = _targetUnit,
                 ShootingUnit = Unit
             });
-            int damageAmount = 40;
-            _targetUnit.Damage(damageAmount);
+
+            _targetUnit.Damage(_damageAmount);
         }
 
         public override string GetActionName()
