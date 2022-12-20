@@ -23,13 +23,13 @@ namespace Actions
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {
-            ActionStart(onActionComplete);
-            
             _totalSpinAmount = 0f;
+            
+            ActionStart(onActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList() =>
-            new() {Unit.GridPosition};
+            new() {ThisUnit.GridPosition};
 
         public override string GetActionName()
         {

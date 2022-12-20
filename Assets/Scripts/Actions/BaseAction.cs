@@ -9,13 +9,19 @@ namespace Actions
     [RequireComponent(typeof(Unit))]
     public abstract class BaseAction : MonoBehaviour
     {
-        protected Unit Unit;
+        public static event EventHandler OnAnyActionStarted;
+        public static event EventHandler OnAnyActionCompleted;
+        
+        protected Unit ThisUnit;
         protected bool IsActive;
         protected Action OnActionComplete;
 
+        public Unit Unit => ThisUnit;
+
+
         protected virtual void Awake()
         {
-            Unit = GetComponent<Unit>();
+            ThisUnit = GetComponent<Unit>();
         }
 
         public abstract string GetActionName();
@@ -36,12 +42,14 @@ namespace Actions
         {
             IsActive = true;
             OnActionComplete = onActionComplete;
+            OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
         }
         
         protected void ActionComplete()
         {
             IsActive = false;
             OnActionComplete();
+            OnAnyActionCompleted?.Invoke(this, EventArgs.Empty);
         }
 
 

@@ -30,6 +30,8 @@ namespace Actions
 
         public event EventHandler<OnShootEventArgs> OnShoot;
 
+        public Unit TargetUnit => _targetUnit;
+
         private void Update()
         {
             if (!IsActive) return;
@@ -39,7 +41,7 @@ namespace Actions
             switch (_state)
             {
                 case State.Aiming:
-                    Vector3 aimDirection = (_targetUnit.GetWorldPosition() - Unit.GetWorldPosition()).normalized;
+                    Vector3 aimDirection = (_targetUnit.GetWorldPosition() - ThisUnit.GetWorldPosition()).normalized;
                     transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
                     break;
                 case State.Shooting:
@@ -82,7 +84,7 @@ namespace Actions
             OnShoot?.Invoke(this, new OnShootEventArgs
             {
                 TargetUnit = _targetUnit,
-                ShootingUnit = Unit
+                ShootingUnit = ThisUnit
             });
 
             _targetUnit.Damage(_damageAmount);
@@ -95,19 +97,19 @@ namespace Actions
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {
-            ActionStart(onActionComplete);
-
             _targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
             _state = State.Aiming;
             float aimingStateTime = 1f;
             _stateTimer = aimingStateTime;
             _canShootBullet = true;
+            
+            ActionStart(onActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()
         {
             List<GridPosition> validGridPositionList = new List<GridPosition>();
-            GridPosition unitGridPosition = Unit.GridPosition;
+            GridPosition unitGridPosition = ThisUnit.GridPosition;
 
             for (int x = -_maxShootDistance; x <= _maxShootDistance; x++)
             {
@@ -123,7 +125,7 @@ namespace Actions
                     if (!LevelGrid.Instance.HasAnyUnit(testGridPosition)) continue;
 
                     Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
-                    if (targetUnit.IsEnemy == Unit.IsEnemy) continue;
+                    if (targetUnit.IsEnemy == ThisUnit.IsEnemy) continue;
 
                     validGridPositionList.Add(testGridPosition);
                 }

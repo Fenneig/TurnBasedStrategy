@@ -12,7 +12,7 @@ namespace Actions
 
         public event EventHandler OnStartMoving;
         public event EventHandler OnStopMoving;
-        
+
         private Vector3 _targetPosition;
 
         private static readonly int IsWalking = Animator.StringToHash("IsWalking");
@@ -32,38 +32,38 @@ namespace Actions
         private void Update()
         {
             if (!IsActive) return;
-            
+
             float stoppingDistance = .1f;
             Vector3 moveDirection = (_targetPosition - transform.position).normalized;
-            
+
             if (Vector3.Distance(transform.position, _targetPosition) > stoppingDistance)
-            { 
+            {
                 float moveSpeed = 4f;
                 transform.position += moveDirection * Time.deltaTime * moveSpeed;
             }
             else
             {
-                OnStopMoving?.Invoke(this,EventArgs.Empty);
+                OnStopMoving?.Invoke(this, EventArgs.Empty);
                 ActionComplete();
             }
-            
+
             float rotateSpeed = 10f;
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
         }
 
         public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
         {
-            ActionStart(onActionComplete);
-            
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
-            
+
             OnStartMoving?.Invoke(this, EventArgs.Empty);
+
+            ActionStart(onActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()
         {
             List<GridPosition> validGridPositionList = new List<GridPosition>();
-            GridPosition unitGridPosition = Unit.GridPosition;
+            GridPosition unitGridPosition = ThisUnit.GridPosition;
 
             for (int x = -_maxMoveDistance; x <= _maxMoveDistance; x++)
             {
@@ -73,7 +73,7 @@ namespace Actions
                     GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition) ||
                         LevelGrid.Instance.HasAnyUnit(testGridPosition)) continue;
-                    
+
                     validGridPositionList.Add(testGridPosition);
                 }
             }
