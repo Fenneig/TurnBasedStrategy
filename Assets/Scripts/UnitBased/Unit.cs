@@ -18,7 +18,6 @@ namespace UnitBased
         public SpinAction SpinAction { get; private set; }
         public BaseAction[] BaseActions { get; private set; }
         public int ActionPoints { get; set; }
-
         public bool IsEnemy => _isEnemy;
 
         private void Awake()
@@ -42,8 +41,9 @@ namespace UnitBased
         {
             var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
             if (newGridPosition == GridPosition) return;
-            LevelGrid.Instance.UnitMovedGridPosition(this, GridPosition, newGridPosition);
+            GridPosition oldGridPosition = GridPosition;
             GridPosition = newGridPosition;
+            LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
         }
 
         public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
@@ -73,6 +73,7 @@ namespace UnitBased
             LevelGrid.Instance.RemoveUnitAtGridPosition(GridPosition, this);
             Destroy(gameObject);
         }
+        
         private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
         {
             if (IsEnemy && !TurnSystem.Instance.IsPlayerTurn ||

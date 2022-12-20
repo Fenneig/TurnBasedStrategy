@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnitBased;
 using UnityEngine;
@@ -12,8 +13,10 @@ namespace Grid
         public int Widht => _gridSystem.Width;
         public int Height => _gridSystem.Height;
 
+        public event EventHandler OnAnyUnitMovedGridPosition;
+        
         public static LevelGrid Instance { get; private set; }
-
+        
         private void Awake()
         {
             if (Instance != null)
@@ -35,13 +38,12 @@ namespace Grid
         public List<Unit> GetUnitListAtGridPosition(GridPosition position) =>
             _gridSystem.GetGridObject(position).GetUnitList();
 
-
         public void RemoveUnitAtGridPosition(GridPosition position, Unit unit) =>
             _gridSystem.GetGridObject(position).RemoveUnit(unit);
 
-
         public GridPosition GetGridPosition(Vector3 worldPosition) =>
             _gridSystem.GetGridPosition(worldPosition);
+        
         public Vector3 GetWorldPosition(GridPosition gridPosition) =>
             _gridSystem.GetWorldPosition(gridPosition);
 
@@ -49,6 +51,7 @@ namespace Grid
         {
             RemoveUnitAtGridPosition(fromGridPosition, unit);
             AddUnitAtGridPosition(toGridPosition, unit);
+            OnAnyUnitMovedGridPosition?.Invoke(this, EventArgs.Empty);
         }
 
         public bool IsValidGridPosition(GridPosition gridPosition) =>

@@ -31,6 +31,7 @@ namespace Actions
         public event EventHandler<OnShootEventArgs> OnShoot;
 
         public Unit TargetUnit => _targetUnit;
+        public int MaxShootDistance => _maxShootDistance;
 
         private void Update()
         {
