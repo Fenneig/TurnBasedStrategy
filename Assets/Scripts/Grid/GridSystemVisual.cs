@@ -99,9 +99,12 @@ namespace Grid
         public void UpdateGridVisual()
         {
             HideAllGridPosition();
+            
             Unit selectedUnit = UnitActionSystem.Instance.SelectedUnit;
             BaseAction selectedAction = UnitActionSystem.Instance.SelectedAction;
+            
             GridVisualType gridVisualType;
+            
             switch (selectedAction)
             {
                 default:

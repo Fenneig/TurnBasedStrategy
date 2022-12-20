@@ -11,6 +11,8 @@ namespace UnitBased
         [SerializeField] private bool _isEnemy;
 
         public static event EventHandler OnAnyActionPointsChanged;
+        public static event EventHandler OnAnyUnitSpawned;
+        public static event EventHandler OnAnyUnitDead;
 
         public HealthComponent Health { get; private set; }
         public GridPosition GridPosition { get; private set; }
@@ -35,6 +37,7 @@ namespace UnitBased
             LevelGrid.Instance.AddUnitAtGridPosition(GridPosition, this);
             TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
             Health.OnDead += HealthComponent_OnDead;
+            OnAnyUnitSpawned?.Invoke(this,EventArgs.Empty);
         }
 
         private void Update()
@@ -50,7 +53,7 @@ namespace UnitBased
         {
             if (CanSpendActionPointToTakeAction(baseAction))
             {
-                SpendActionPoints(baseAction.GetActionPointsCost());
+                SpendActionPoints(baseAction.ActionPointsCost);
                 return true;
             }
 
@@ -58,7 +61,7 @@ namespace UnitBased
         }
 
         private bool CanSpendActionPointToTakeAction(BaseAction baseAction) =>
-            ActionPoints >= baseAction.GetActionPointsCost();
+            ActionPoints >= baseAction.ActionPointsCost;
 
 
         private void SpendActionPoints(int amount)
@@ -71,6 +74,9 @@ namespace UnitBased
         private void HealthComponent_OnDead(object sender, EventArgs args)
         {
             LevelGrid.Instance.RemoveUnitAtGridPosition(GridPosition, this);
+            
+            OnAnyUnitDead?.Invoke(this,EventArgs.Empty);
+            
             Destroy(gameObject);
         }
         

@@ -16,8 +16,7 @@ namespace Actions
         private Vector3 _targetPosition;
 
         private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-
-
+        
         protected override void Awake()
         {
             base.Awake();
@@ -72,7 +71,8 @@ namespace Actions
                     GridPosition offsetGridPosition = new GridPosition(x, z);
                     GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition) ||
-                        LevelGrid.Instance.HasAnyUnit(testGridPosition)) continue;
+                        LevelGrid.Instance.HasAnyUnit(testGridPosition)||
+                        unitGridPosition == testGridPosition) continue;
 
                     validGridPositionList.Add(testGridPosition);
                 }

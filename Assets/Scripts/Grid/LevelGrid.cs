@@ -38,8 +38,11 @@ namespace Grid
         public List<Unit> GetUnitListAtGridPosition(GridPosition position) =>
             _gridSystem.GetGridObject(position).GetUnitList();
 
-        public void RemoveUnitAtGridPosition(GridPosition position, Unit unit) =>
+        public void RemoveUnitAtGridPosition(GridPosition position, Unit unit)
+        {
             _gridSystem.GetGridObject(position).RemoveUnit(unit);
+            OnAnyUnitMovedGridPosition?.Invoke(this,EventArgs.Empty);
+        }
 
         public GridPosition GetGridPosition(Vector3 worldPosition) =>
             _gridSystem.GetGridPosition(worldPosition);

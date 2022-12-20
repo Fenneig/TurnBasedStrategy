@@ -12,6 +12,9 @@ namespace Actions
         public static event EventHandler OnAnyActionStarted;
         public static event EventHandler OnAnyActionCompleted;
         
+        [SerializeField] private int _actionPointsCost = 1;
+        public int ActionPointsCost => _actionPointsCost;
+        
         protected Unit ThisUnit;
         protected bool IsActive;
         protected Action OnActionComplete;
@@ -32,11 +35,6 @@ namespace Actions
             GetValidActionGridPositionList().Contains(gridPosition);
 
         public abstract List<GridPosition> GetValidActionGridPositionList();
-
-        public virtual int GetActionPointsCost()
-        {
-            return 1;
-        }
 
         protected void ActionStart(Action onActionComplete)
         {
