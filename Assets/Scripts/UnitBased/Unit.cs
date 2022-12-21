@@ -16,22 +16,27 @@ namespace UnitBased
 
         public HealthComponent Health { get; private set; }
         public GridPosition GridPosition { get; private set; }
-        public MoveAction MoveAction { get; private set; }
-        public SpinAction SpinAction { get; private set; }
-        public ShootAction ShootAction { get; private set; }
         public BaseAction[] BaseActions { get; private set; }
         public int ActionPoints { get; set; }
         public bool IsEnemy => _isEnemy;
 
         private void Awake()
         {
-            MoveAction = GetComponent<MoveAction>();
-            SpinAction = GetComponent<SpinAction>();
             BaseActions = GetComponents<BaseAction>();
-            ShootAction = GetComponent<ShootAction>();
             Health = GetComponent<HealthComponent>();
             ActionPoints = 2;
         }
+
+        public T GetAction<T>() where T : BaseAction
+        {
+            foreach (var baseAction in BaseActions)
+            {
+                if (baseAction is T) return (T)baseAction;
+            }
+
+            return null;
+        }
+        
 
         private void Start()
         {

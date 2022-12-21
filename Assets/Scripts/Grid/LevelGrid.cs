@@ -8,15 +8,15 @@ namespace Grid
     public class LevelGrid : MonoBehaviour
     {
         [SerializeField] private Transform _gridDebugObjectPrefab;
-        private GridSystem _gridSystem;
+        private GridSystem<GridObject> _gridSystem;
 
         public int Widht => _gridSystem.Width;
         public int Height => _gridSystem.Height;
 
         public event EventHandler OnAnyUnitMovedGridPosition;
-        
+
         public static LevelGrid Instance { get; private set; }
-        
+
         private void Awake()
         {
             if (Instance != null)
@@ -27,7 +27,8 @@ namespace Grid
 
             Instance = this;
 
-            _gridSystem = new GridSystem(10, 10, 2);
+            _gridSystem = new GridSystem<GridObject>(10, 10, 2,
+                (gridSystem, gridPosition) => new GridObject(gridSystem, gridPosition));
             _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
         }
 
@@ -41,12 +42,12 @@ namespace Grid
         public void RemoveUnitAtGridPosition(GridPosition position, Unit unit)
         {
             _gridSystem.GetGridObject(position).RemoveUnit(unit);
-            OnAnyUnitMovedGridPosition?.Invoke(this,EventArgs.Empty);
+            OnAnyUnitMovedGridPosition?.Invoke(this, EventArgs.Empty);
         }
 
         public GridPosition GetGridPosition(Vector3 worldPosition) =>
             _gridSystem.GetGridPosition(worldPosition);
-        
+
         public Vector3 GetWorldPosition(GridPosition gridPosition) =>
             _gridSystem.GetWorldPosition(gridPosition);
 

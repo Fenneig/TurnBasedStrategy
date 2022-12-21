@@ -48,7 +48,7 @@ namespace UnitBased
             private set
             {
                 _selectedUnit = value;
-                SelectedAction = _selectedUnit.MoveAction;
+                SelectedAction = _selectedUnit.GetAction<MoveAction>();
                 OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
             }
         }
