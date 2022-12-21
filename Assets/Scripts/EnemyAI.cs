@@ -1,6 +1,5 @@
 ﻿using System;
 using Actions;
-using Grid;
 using UnitBased;
 using UnityEngine;
 
@@ -78,14 +77,33 @@ public class EnemyAI : MonoBehaviour
 
     private bool TryTakeEnemyAIAction(Unit enemyUnit, Action onEnemyAIActionComplete)
     {
-        SpinAction spinAction = enemyUnit.SpinAction;
+        EnemyAIAction bestEnemyAIAction = null;
+        BaseAction bestBaseAction = null;
+        foreach (BaseAction baseAction in enemyUnit.BaseActions)
+        {
+            if (!enemyUnit.CanSpendActionPointToTakeAction(baseAction)) 
+                continue;
 
-        GridPosition actionGridPosition = enemyUnit.GridPosition;
+            if (bestEnemyAIAction == null)
+            {
+                bestEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                bestBaseAction = baseAction;
+            }
+            else
+            {
+                EnemyAIAction testEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                if (testEnemyAIAction != null && testEnemyAIAction.ActionValue > bestEnemyAIAction.ActionValue)
+                {
+                    bestEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                    bestBaseAction = baseAction;
+                }
+            }
+        }
 
-        if (!spinAction.IsValidActionGridPosition(actionGridPosition)) return false;
-        if (!enemyUnit.TrySpendActionPointsToTakeAction(spinAction)) return false;
-
-        spinAction.TakeAction(actionGridPosition, onEnemyAIActionComplete);
+        if (bestEnemyAIAction == null || !enemyUnit.TrySpendActionPointsToTakeAction(bestBaseAction)) return false;
+        
+        bestBaseAction.TakeAction(bestEnemyAIAction.GridPosition ,onEnemyAIActionComplete);
         return true;
+
     }
 }

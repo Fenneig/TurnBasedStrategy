@@ -11,16 +11,15 @@ namespace Actions
     {
         public static event EventHandler OnAnyActionStarted;
         public static event EventHandler OnAnyActionCompleted;
-        
+
         [SerializeField] private int _actionPointsCost = 1;
         public int ActionPointsCost => _actionPointsCost;
-        
+
         protected Unit ThisUnit;
         protected bool IsActive;
         protected Action OnActionComplete;
 
         public Unit Unit => ThisUnit;
-
 
         protected virtual void Awake()
         {
@@ -42,7 +41,7 @@ namespace Actions
             OnActionComplete = onActionComplete;
             OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
         }
-        
+
         protected void ActionComplete()
         {
             IsActive = false;
@@ -50,6 +49,25 @@ namespace Actions
             OnAnyActionCompleted?.Invoke(this, EventArgs.Empty);
         }
 
+        public EnemyAIAction GetBestEnemyAIAction()
+        {
+            List<EnemyAIAction> enemyAIActionList = new List<EnemyAIAction>();
 
+            List<GridPosition> validActionGridPositionList = GetValidActionGridPositionList();
+
+            foreach (GridPosition gridPosition in validActionGridPositionList)
+            {
+                EnemyAIAction enemyAIAction = GetBestEnemyAIAction(gridPosition);
+                enemyAIActionList.Add(enemyAIAction);
+            }
+
+            if (enemyAIActionList.Count == 0) return null;
+            
+            enemyAIActionList.Sort((AIactionA, AIactionB) =>
+                AIactionB.ActionValue - AIactionA.ActionValue);
+            return enemyAIActionList[0];
+        }
+
+        public abstract EnemyAIAction GetBestEnemyAIAction(GridPosition gridPosition);
     }
 }

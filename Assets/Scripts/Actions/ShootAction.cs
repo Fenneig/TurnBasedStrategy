@@ -109,8 +109,13 @@ namespace Actions
 
         public override List<GridPosition> GetValidActionGridPositionList()
         {
-            List<GridPosition> validGridPositionList = new List<GridPosition>();
             GridPosition unitGridPosition = ThisUnit.GridPosition;
+
+            return GetValidActionGridPositionList(unitGridPosition);
+        }
+        public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition)
+        {
+            List<GridPosition> validGridPositionList = new List<GridPosition>();
 
             for (int x = -_maxShootDistance; x <= _maxShootDistance; x++)
             {
@@ -133,6 +138,22 @@ namespace Actions
             }
 
             return validGridPositionList;
+        }
+        
+        public override EnemyAIAction GetBestEnemyAIAction(GridPosition gridPosition)
+        {
+            Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
+            
+            return new EnemyAIAction
+            {
+                GridPosition = gridPosition,
+                ActionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized()) * 100f)
+            };
+        }
+
+        public int GetTargetCountAtPosition(GridPosition gridPosition)
+        {
+            return GetValidActionGridPositionList(gridPosition).Count;
         }
     }
 }

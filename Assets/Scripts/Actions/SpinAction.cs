@@ -31,6 +31,15 @@ namespace Actions
         public override List<GridPosition> GetValidActionGridPositionList() =>
             new() {ThisUnit.GridPosition};
 
+        public override EnemyAIAction GetBestEnemyAIAction(GridPosition gridPosition)
+        {
+            return new EnemyAIAction
+            {
+                GridPosition = gridPosition,
+                ActionValue = 0
+            };
+        }
+
         public override string GetActionName()
         {
             return "Spin";

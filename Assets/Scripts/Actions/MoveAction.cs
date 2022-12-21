@@ -80,5 +80,15 @@ namespace Actions
 
             return validGridPositionList;
         }
+        
+        public override EnemyAIAction GetBestEnemyAIAction(GridPosition gridPosition)
+        {
+            int targetCountAtPosition = Unit.ShootAction.GetTargetCountAtPosition(gridPosition);
+            return new EnemyAIAction
+            {
+                GridPosition = gridPosition,
+                ActionValue = 10 * targetCountAtPosition
+            };
+        }
     }
 }

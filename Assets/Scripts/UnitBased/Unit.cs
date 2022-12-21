@@ -18,6 +18,7 @@ namespace UnitBased
         public GridPosition GridPosition { get; private set; }
         public MoveAction MoveAction { get; private set; }
         public SpinAction SpinAction { get; private set; }
+        public ShootAction ShootAction { get; private set; }
         public BaseAction[] BaseActions { get; private set; }
         public int ActionPoints { get; set; }
         public bool IsEnemy => _isEnemy;
@@ -27,6 +28,7 @@ namespace UnitBased
             MoveAction = GetComponent<MoveAction>();
             SpinAction = GetComponent<SpinAction>();
             BaseActions = GetComponents<BaseAction>();
+            ShootAction = GetComponent<ShootAction>();
             Health = GetComponent<HealthComponent>();
             ActionPoints = 2;
         }
@@ -51,16 +53,14 @@ namespace UnitBased
 
         public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
         {
-            if (CanSpendActionPointToTakeAction(baseAction))
-            {
-                SpendActionPoints(baseAction.ActionPointsCost);
-                return true;
-            }
+            if (!CanSpendActionPointToTakeAction(baseAction)) return false;
+            
+            SpendActionPoints(baseAction.ActionPointsCost);
+            return true;
 
-            return false;
         }
 
-        private bool CanSpendActionPointToTakeAction(BaseAction baseAction) =>
+        public bool CanSpendActionPointToTakeAction(BaseAction baseAction) =>
             ActionPoints >= baseAction.ActionPointsCost;
 
 
@@ -96,12 +96,13 @@ namespace UnitBased
             TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
         }
 
-        public void Damage(int damageAmount)
-        {
+        public void Damage(int damageAmount) =>
             Health.Damage(damageAmount);
-        }
 
         public Vector3 GetWorldPosition() => 
             transform.position;
+
+        public float GetHealthNormalized() =>
+            Health.GetHealthNormalized();
     }
 }
