@@ -1,6 +1,8 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
 
+namespace Utils
+{
     public class BulletProjectile : MonoBehaviour
     {
         [SerializeField] private TrailRenderer _trailRenderer;
@@ -30,3 +32,4 @@ using UnityEngine;
             }
         }
     }
+}
