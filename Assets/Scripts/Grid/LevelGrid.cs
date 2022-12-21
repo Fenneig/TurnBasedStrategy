@@ -29,7 +29,7 @@ namespace Grid
 
             _gridSystem = new GridSystem<GridObject>(10, 10, 2,
                 (gridSystem, gridPosition) => new GridObject(gridSystem, gridPosition));
-            _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
+            //_gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
         }
 
         public void AddUnitAtGridPosition(GridPosition position, Unit unit) =>

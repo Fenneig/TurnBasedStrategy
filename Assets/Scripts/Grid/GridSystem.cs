@@ -50,7 +50,7 @@ namespace Grid
                     Transform debugTransform =
                         GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity);
                     GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
-                    gridDebugObject.GridObject = _gridObjectArray[x, z] as GridObject;
+                    gridDebugObject.SetGridObject(_gridObjectArray[x, z]);
                 }
             }
         }

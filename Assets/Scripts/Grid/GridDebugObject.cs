@@ -6,14 +6,14 @@ namespace Grid
     public class GridDebugObject : MonoBehaviour
     {
         [SerializeField] private TextMeshPro _text;
-        private GridObject _gridObject;
-        
-        public GridObject GridObject
+        private object _gridObject;
+
+        public virtual void SetGridObject(object gridObject)
         {
-            set => _gridObject = value;
+            _gridObject = gridObject;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             _text.text = _gridObject.ToString();
         }
