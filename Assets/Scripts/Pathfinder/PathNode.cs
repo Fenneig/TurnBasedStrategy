@@ -9,12 +9,29 @@ namespace Pathfinder
         private int _hCost;
         private int _fCost;
         private PathNode _cameFromPathNode;
+        
+        public PathNode CameFromPathNode
+        {
+            get => _cameFromPathNode;
+            set => _cameFromPathNode = value;
+        }
 
-        public int GCost => _gCost;
-        public int HCost => _hCost;
-        public int FCost => _fCost;
-        
-        
+        public GridPosition GridPosition => _gridPosition;
+
+        public int GCost
+        {
+            get => _gCost;
+            set => _gCost = value;
+        }
+
+        public int HCost
+        {
+            get => _hCost;
+            set => _hCost = value;
+        }
+
+        public int FCost => _gCost + _hCost;
+
         public PathNode(GridPosition gridPosition)
         {
             _gridPosition = gridPosition;
