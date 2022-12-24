@@ -7,11 +7,12 @@ namespace Pathfinder
     public class Pathfinding : MonoBehaviour
     {
         public static Pathfinding Instance { get; private set; }
-        
+
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
         [SerializeField] private Transform _gridDebugObjectPrefab;
+        [SerializeField] private LayerMask _obstacleLayerMask;
         private int _width;
         private int _height;
         private float _cellSize;
@@ -20,9 +21,32 @@ namespace Pathfinder
         private void Awake()
         {
             Instance ??= this;
-            _gridSystem = new GridSystem<PathNode>(10, 10, 2f,
-                (system, position) => new PathNode(position));
-            _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
+        }
+
+        public void Setup(int width, int height, float cellSize)
+        {
+            _width = width;
+            _height = height;
+            _cellSize = cellSize;
+
+            _gridSystem =
+                new GridSystem<PathNode>(width, height, cellSize, (system, position) => new PathNode(position));
+
+            _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab, transform);
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < height; z++)
+                {
+                    GridPosition gridPosition = new GridPosition(x, z);
+                    Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+                    float raycastOffsetDistance = 2f;
+                    float maxRaycastDistance = 3f;
+                    GetNode(x, z).IsWalkable = !Physics.Raycast(
+                        worldPosition + Vector3.down * raycastOffsetDistance, Vector3.up,
+                        maxRaycastDistance, _obstacleLayerMask);
+                }
+            }
         }
 
         public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
@@ -65,7 +89,13 @@ namespace Pathfinder
                 {
                     if (closeList.Contains(neighbourNode)) continue;
 
-                    int tentativeGCost = currentNode.GCost + 
+                    if (!neighbourNode.IsWalkable)
+                    {
+                        closeList.Add(neighbourNode);
+                        continue;
+                    }
+
+                    int tentativeGCost = currentNode.GCost +
                                          CalculateDistance(currentNode.GridPosition, neighbourNode.GridPosition);
 
                     if (tentativeGCost < neighbourNode.GCost)
@@ -79,7 +109,6 @@ namespace Pathfinder
                             openList.Add(neighbourNode);
                         }
                     }
-                    
                 }
             }
 
@@ -148,6 +177,7 @@ namespace Pathfinder
             {
                 gridPositionList.Add(pathNode.GridPosition);
             }
+
             return gridPositionList;
         }
     }

@@ -9,7 +9,7 @@ namespace Pathfinder
         private int _hCost;
         private int _fCost;
         private PathNode _cameFromPathNode;
-        
+
         public PathNode CameFromPathNode
         {
             get => _cameFromPathNode;
@@ -31,6 +31,7 @@ namespace Pathfinder
         }
 
         public int FCost => _gCost + _hCost;
+        public bool IsWalkable { get; set; } = true;
 
         public PathNode(GridPosition gridPosition)
         {

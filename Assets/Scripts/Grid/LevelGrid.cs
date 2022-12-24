@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Pathfinder;
 using UnitBased;
 using UnityEngine;
 
@@ -7,16 +8,24 @@ namespace Grid
 {
     public class LevelGrid : MonoBehaviour
     {
-        [SerializeField] private Transform _gridDebugObjectPrefab;
-        private GridSystem<GridObject> _gridSystem;
-
-        public int Widht => _gridSystem.Width;
-        public int Height => _gridSystem.Height;
-
-        public event EventHandler OnAnyUnitMovedGridPosition;
-
         public static LevelGrid Instance { get; private set; }
+        
+        public event EventHandler OnAnyUnitMovedGridPosition;
+        
+        
+        [SerializeField] private Transform _gridDebugObjectPrefab;
+        [SerializeField] private int _width = 10;
+        [SerializeField] private int _height = 10;
+        [SerializeField] private float _cellSize = 2f;
+        
+        
+        private GridSystem<GridObject> _gridSystem;
+        
+        
+        public int Width => _width;
+        public int Height => _height;
 
+        
         private void Awake()
         {
             if (Instance != null)
@@ -27,9 +36,13 @@ namespace Grid
 
             Instance = this;
 
-            _gridSystem = new GridSystem<GridObject>(10, 10, 2,
-                (gridSystem, gridPosition) => new GridObject(gridSystem, gridPosition));
-            //_gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
+            _gridSystem = new GridSystem<GridObject>(_width, _height, _cellSize,
+                (system, position) => new GridObject(system, position));
+        }
+
+        private void Start()
+        {
+            Pathfinding.Instance.Setup(_width, _height, _cellSize);
         }
 
         public void AddUnitAtGridPosition(GridPosition position, Unit unit) =>

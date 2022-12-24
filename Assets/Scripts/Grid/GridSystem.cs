@@ -40,7 +40,7 @@ namespace Grid
                 Mathf.RoundToInt(worldPosition.z / _cellSize));
         }
 
-        public void CreateDebugObjects(Transform debugPrefab)
+        public void CreateDebugObjects(Transform debugPrefab, Transform parentTransform)
         {
             for (int x = 0; x < _width; x++)
             {
@@ -48,7 +48,7 @@ namespace Grid
                 {
                     GridPosition gridPosition = new GridPosition(x, z);
                     Transform debugTransform =
-                        GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity);
+                        GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity, parentTransform);
                     GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
                     gridDebugObject.SetGridObject(_gridObjectArray[x, z]);
                 }
