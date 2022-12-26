@@ -11,8 +11,10 @@ namespace Pathfinder
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
+
         [SerializeField] private Transform _gridDebugObjectPrefab;
         [SerializeField] private LayerMask _obstacleLayerMask;
+        [SerializeField] private bool _createDebugObjects;
         private int _width;
         private int _height;
         private float _cellSize;
@@ -32,7 +34,7 @@ namespace Pathfinder
             _gridSystem =
                 new GridSystem<PathNode>(width, height, cellSize, (system, position) => new PathNode(position));
 
-            _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab, transform);
+            if (_createDebugObjects) _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab, transform);
 
             for (int x = 0; x < width; x++)
             {
