@@ -51,7 +51,8 @@ namespace Pathfinder
             }
         }
 
-        public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
+        public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition,
+            out int pathLength)
         {
             List<PathNode> openList = new List<PathNode>();
             List<PathNode> closeList = new List<PathNode>();
@@ -81,6 +82,7 @@ namespace Pathfinder
 
                 if (currentNode == endNode)
                 {
+                    pathLength = endNode.FCost;
                     return CalculatePath(endNode);
                 }
 
@@ -115,6 +117,7 @@ namespace Pathfinder
             }
 
             //no path found
+            pathLength = 0;
             return null;
         }
 
@@ -181,6 +184,14 @@ namespace Pathfinder
             }
 
             return gridPositionList;
+        }
+
+        public bool IsValidGridPosition(GridPosition startGridPosition, GridPosition endGridPosition, int maxDistance)
+        {
+            int pathfindingDistanceMultiplier = MOVE_STRAIGHT_COST;
+            bool hasPath = FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
+            return _gridSystem.GetGridObject(endGridPosition).IsWalkable && hasPath &&
+                   pathLength <= maxDistance * pathfindingDistanceMultiplier;
         }
     }
 }

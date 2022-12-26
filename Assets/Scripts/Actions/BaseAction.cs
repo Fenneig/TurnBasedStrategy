@@ -16,15 +16,14 @@ namespace Actions
         [SerializeField] private int _actionPointsCost = 1;
         public int ActionPointsCost => _actionPointsCost;
 
-        protected Unit ThisUnit;
         protected bool IsActive;
         protected Action OnActionComplete;
 
-        public Unit Unit => ThisUnit;
+        public Unit Unit { get; protected set; }
 
         protected virtual void Awake()
         {
-            ThisUnit = GetComponent<Unit>();
+            Unit = GetComponent<Unit>();
         }
 
         public abstract string GetActionName();

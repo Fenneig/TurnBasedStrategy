@@ -30,7 +30,7 @@ namespace Actions
         }
 
         public override List<GridPosition> GetValidActionGridPositionList() =>
-            new() {ThisUnit.GridPosition};
+            new() {Unit.GridPosition};
 
         public override EnemyAIAction GetBestEnemyAIAction(GridPosition gridPosition)
         {

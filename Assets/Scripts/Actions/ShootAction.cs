@@ -24,6 +24,7 @@ namespace Actions
 
         [SerializeField] private int _maxShootDistance = 7;
         [SerializeField] private int _damageAmount = 40;
+        [SerializeField] private LayerMask _obstacleLayerMask;
         private State _state;
         private float _stateTimer;
         private Unit _targetUnit;
@@ -43,7 +44,7 @@ namespace Actions
             switch (_state)
             {
                 case State.Aiming:
-                    Vector3 aimDirection = (_targetUnit.GetWorldPosition() - ThisUnit.GetWorldPosition()).normalized;
+                    Vector3 aimDirection = (_targetUnit.GetWorldPosition() - Unit.GetWorldPosition()).normalized;
                     transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
                     break;
                 case State.Shooting:
@@ -86,7 +87,7 @@ namespace Actions
             OnShoot?.Invoke(this, new OnShootEventArgs
             {
                 TargetUnit = _targetUnit,
-                ShootingUnit = ThisUnit
+                ShootingUnit = Unit
             });
 
             _targetUnit.Damage(_damageAmount);
@@ -104,16 +105,17 @@ namespace Actions
             float aimingStateTime = 1f;
             _stateTimer = aimingStateTime;
             _canShootBullet = true;
-            
+
             ActionStart(onActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList()
         {
-            GridPosition unitGridPosition = ThisUnit.GridPosition;
+            GridPosition unitGridPosition = Unit.GridPosition;
 
             return GetValidActionGridPositionList(unitGridPosition);
         }
+
         public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition)
         {
             List<GridPosition> validGridPositionList = new List<GridPosition>();
@@ -127,12 +129,20 @@ namespace Actions
 
                     GridPosition offsetGridPosition = new GridPosition(x, z);
                     GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
-
-                    if (!LevelGrid.Instance.HasAnyUnit(testGridPosition)) continue;
+                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition) ||
+                        !LevelGrid.Instance.HasAnyUnit(testGridPosition)) continue;
 
                     Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
-                    if (targetUnit.IsEnemy == ThisUnit.IsEnemy) continue;
+                    if (targetUnit.IsEnemy == Unit.IsEnemy) continue;
+
+                    Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                    Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+                    float unitShoulderHeight = 1.7f;
+
+                    if (Physics.Raycast(unitWorldPosition + Vector3.up * unitShoulderHeight,
+                        shootDirection,
+                        Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                        _obstacleLayerMask)) continue;
 
                     validGridPositionList.Add(testGridPosition);
                 }
@@ -140,11 +150,11 @@ namespace Actions
 
             return validGridPositionList;
         }
-        
+
         public override EnemyAIAction GetBestEnemyAIAction(GridPosition gridPosition)
         {
             Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
-            
+
             return new EnemyAIAction
             {
                 GridPosition = gridPosition,

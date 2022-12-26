@@ -2,6 +2,7 @@ using System;
 using Actions;
 using Grid;
 using UnityEngine;
+using UnityEngine.Profiling;
 using Utils;
 
 namespace UnitBased
@@ -25,7 +26,7 @@ namespace UnitBased
         {
             BaseActions = GetComponents<BaseAction>();
             Health = GetComponent<HealthComponent>();
-            ActionPoints = 2;
+            ActionPoints = _maxActionPoints;
         }
 
         public T GetAction<T>() where T : BaseAction
@@ -48,13 +49,18 @@ namespace UnitBased
             OnAnyUnitSpawned?.Invoke(this,EventArgs.Empty);
         }
 
+        private GridPosition _newGridPosition;
+        private GridPosition _oldGridPosition;
+
         private void Update()
         {
-            var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            if (newGridPosition == GridPosition) return;
-            GridPosition oldGridPosition = GridPosition;
-            GridPosition = newGridPosition;
-            LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
+            _newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+            if (_newGridPosition == GridPosition) return;
+            _oldGridPosition = GridPosition;
+            GridPosition = _newGridPosition;
+            
+            //TODO refactor this to remove lags during move action
+            LevelGrid.Instance.UnitMovedGridPosition(this, _oldGridPosition, _newGridPosition);
         }
 
         public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
@@ -63,7 +69,6 @@ namespace UnitBased
             
             SpendActionPoints(baseAction.ActionPointsCost);
             return true;
-
         }
 
         public bool CanSpendActionPointToTakeAction(BaseAction baseAction) =>

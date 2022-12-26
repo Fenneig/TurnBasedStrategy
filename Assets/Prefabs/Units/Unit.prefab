@@ -458,6 +458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5975a90271c46d58d317425a429443a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _actionPointsCost: 1
   _unitAnimator: {fileID: 6587918646923065735}
   _maxMoveDistance: 3
 --- !u!114 &6764657809133343146
@@ -472,6 +473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f63f7c720db94aaf85da44f121ba1432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _actionPointsCost: 1
 --- !u!114 &6314713702189253781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,8 +486,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88513ff6eae047baa8638e21dd7c172d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _actionPointsCost: 1
   _maxShootDistance: 7
   _damageAmount: 40
+  _obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &2770289375992476329
 MonoBehaviour:
   m_ObjectHideFlags: 0
