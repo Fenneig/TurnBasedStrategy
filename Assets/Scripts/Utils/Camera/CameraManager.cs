@@ -28,19 +28,19 @@ namespace Utils.Camera
                     Vector3 cameraCharacterHeight = Vector3.up * 1.7f;
 
                     Vector3 shootDirection =
-                        (targetUnit.GetWorldPosition() - shooterUnit.GetWorldPosition()).normalized;
+                        (targetUnit.WorldPosition - shooterUnit.WorldPosition).normalized;
 
                     float shoulderOffsetAmount = .5f;
                     Vector3 shoulderOffset = Quaternion.Euler(0, 90, 0) * shootDirection * shoulderOffsetAmount;
 
                     Vector3 actionCameraPosition = 
-                        shooterUnit.GetWorldPosition() + 
+                        shooterUnit.WorldPosition + 
                         cameraCharacterHeight + 
                         shoulderOffset + 
                         shootDirection * -1;
 
                     _actionCameraGameObject.transform.position = actionCameraPosition;
-                    _actionCameraGameObject.transform.LookAt(targetUnit.GetWorldPosition() + cameraCharacterHeight);
+                    _actionCameraGameObject.transform.LookAt(targetUnit.WorldPosition + cameraCharacterHeight);
 
                     ShowActionCamera();
                     break;

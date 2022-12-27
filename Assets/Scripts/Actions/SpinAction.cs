@@ -9,7 +9,7 @@ namespace Actions
     public class SpinAction : BaseAction
     {
         private float _totalSpinAmount;
-
+        public override string ActionName => "Spin";
         private void Update()
         {
             if (!IsActive) return;
@@ -39,11 +39,6 @@ namespace Actions
                 GridPosition = gridPosition,
                 ActionValue = 0
             };
-        }
-
-        public override string GetActionName()
-        {
-            return "Spin";
         }
     }
 }

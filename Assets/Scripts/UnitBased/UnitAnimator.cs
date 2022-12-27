@@ -1,7 +1,7 @@
 ﻿using System;
 using Actions;
 using UnityEngine;
-using Utils;
+using Projectiles;
 
 namespace UnitBased
 {
@@ -48,7 +48,7 @@ namespace UnitBased
             Transform bulletProjectileTransform =
                 Instantiate(_bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity);
             BulletProjectile bulletProjectile = bulletProjectileTransform.GetComponent<BulletProjectile>();
-            Vector3 targetUnitShootAtPosition = e.TargetUnit.GetWorldPosition();
+            Vector3 targetUnitShootAtPosition = e.TargetUnit.WorldPosition;
             targetUnitShootAtPosition.y = _shootPointTransform.position.y;
             bulletProjectile.Setup(targetUnitShootAtPosition);
         }

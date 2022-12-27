@@ -20,6 +20,7 @@ namespace UnitBased
         public BaseAction[] BaseActions { get; private set; }
         public int ActionPoints { get; set; }
         public bool IsEnemy => _isEnemy;
+        public Vector3 WorldPosition => transform.position;
 
         private void Awake()
         {
@@ -107,9 +108,6 @@ namespace UnitBased
 
         public void Damage(int damageAmount) =>
             Health.Damage(damageAmount);
-
-        public Vector3 GetWorldPosition() => 
-            transform.position;
 
         public float GetHealthNormalized() =>
             Health.GetHealthNormalized();

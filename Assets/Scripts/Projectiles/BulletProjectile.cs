@@ -1,7 +1,7 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
 
-namespace Utils
+namespace Projectiles
 {
     public class BulletProjectile : MonoBehaviour
     {

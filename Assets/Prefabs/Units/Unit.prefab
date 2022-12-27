@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 2770289375992476329}
   - component: {fileID: 785460270608904911}
   - component: {fileID: 7253068163439340845}
+  - component: {fileID: 8195200274979776959}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -459,7 +460,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _actionPointsCost: 1
-  _unitAnimator: {fileID: 6587918646923065735}
   _maxMoveDistance: 3
 --- !u!114 &6764657809133343146
 MonoBehaviour:
@@ -536,6 +536,25 @@ MonoBehaviour:
   _ragdollPrefab: {fileID: 6501140434225576095, guid: cc0dbec08819f4949916b4a3ba94e0fb,
     type: 3}
   _originalRootBone: {fileID: 6496746047603854469}
+--- !u!114 &8195200274979776959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6501140434225576092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2007bb95a694606bb92ec460b600ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionPointsCost: 1
+  _grenadeProjectilePrefab: {fileID: 2271164452839960270, guid: 451a9712f69ac6e46aefee0497ba3334,
+    type: 3}
+  _obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _maxThrowDistance: 4
 --- !u!1 &7842111439918429490
 GameObject:
   m_ObjectHideFlags: 0

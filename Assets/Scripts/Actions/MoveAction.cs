@@ -9,9 +9,6 @@ namespace Actions
 {
     public class MoveAction : BaseAction
     {
-        private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-
-        [SerializeField] private Animator _unitAnimator;
         [SerializeField] private int _maxMoveDistance = 4;
 
         public event EventHandler OnStartMoving;
@@ -20,11 +17,7 @@ namespace Actions
         private List<Vector3> _positionList;
         private int _currentPositionIndex;
 
-
-        public override string GetActionName()
-        {
-            return "Move";
-        }
+        public override string ActionName => "Move";
 
         private void Update()
         {

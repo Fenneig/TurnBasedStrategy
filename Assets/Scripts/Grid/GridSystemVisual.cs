@@ -118,6 +118,9 @@ namespace Grid
                 case SpinAction:
                     gridVisualType = GridVisualType.Blue;
                     break;
+                case GrenadeAction:
+                    gridVisualType = GridVisualType.Yellow;
+                    break;
             }
 
             ShowGridPositionList(selectedAction.GetValidActionGridPositionList(), gridVisualType);

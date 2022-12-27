@@ -15,6 +15,7 @@ namespace Actions
 
         [SerializeField] private int _actionPointsCost = 1;
         public int ActionPointsCost => _actionPointsCost;
+        public abstract string ActionName { get; }
 
         protected bool IsActive;
         protected Action OnActionComplete;
@@ -25,8 +26,6 @@ namespace Actions
         {
             Unit = GetComponent<Unit>();
         }
-
-        public abstract string GetActionName();
 
         public abstract void TakeAction(GridPosition gridPosition, Action onActionComplete);
 
