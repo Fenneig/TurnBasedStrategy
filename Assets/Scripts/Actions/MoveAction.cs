@@ -4,7 +4,6 @@ using AI;
 using Grid;
 using Pathfinder;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Actions
 {

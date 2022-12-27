@@ -55,7 +55,6 @@ namespace Grid
         public void RemoveUnitAtGridPosition(GridPosition position, Unit unit)
         {
             _gridSystem.GetGridObject(position).RemoveUnit(unit);
-            OnAnyUnitMovedGridPosition?.Invoke(this, EventArgs.Empty);
         }
 
         public GridPosition GetGridPosition(Vector3 worldPosition) =>

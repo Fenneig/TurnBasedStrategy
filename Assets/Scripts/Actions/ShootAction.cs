@@ -9,6 +9,9 @@ namespace Actions
 {
     public class ShootAction : BaseAction
     {
+        public static event EventHandler<OnShootEventArgs> OnAnyShoot;
+        public event EventHandler<OnShootEventArgs> OnShoot;
+        
         public class OnShootEventArgs : EventArgs
         {
             public Unit TargetUnit;
@@ -30,7 +33,6 @@ namespace Actions
         private Unit _targetUnit;
         private bool _canShootBullet;
 
-        public event EventHandler<OnShootEventArgs> OnShoot;
 
         public Unit TargetUnit => _targetUnit;
         public int MaxShootDistance => _maxShootDistance;
@@ -85,6 +87,11 @@ namespace Actions
         private void Shoot()
         {
             OnShoot?.Invoke(this, new OnShootEventArgs
+            {
+                TargetUnit = _targetUnit,
+                ShootingUnit = Unit
+            });
+            OnAnyShoot?.Invoke(this, new OnShootEventArgs
             {
                 TargetUnit = _targetUnit,
                 ShootingUnit = Unit

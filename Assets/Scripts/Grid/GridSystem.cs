@@ -55,7 +55,8 @@ namespace Grid
             }
         }
 
-        public TGridObject GetGridObject(GridPosition gridPosition) => _gridObjectArray[gridPosition.X, gridPosition.Z];
+        public TGridObject GetGridObject(GridPosition gridPosition) =>
+            _gridObjectArray[gridPosition.X, gridPosition.Z];
 
         public bool IsValidGridPosition(GridPosition gridPosition) =>
             gridPosition.X >= 0 &&

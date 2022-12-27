@@ -51,6 +51,7 @@ namespace Pathfinder
             }
         }
 
+        //TODO refactor this to remove lags during move action
         public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition,
             out int pathLength)
         {

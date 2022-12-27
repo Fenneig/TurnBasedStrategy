@@ -2,7 +2,6 @@ using System;
 using Actions;
 using Grid;
 using UnityEngine;
-using UnityEngine.Profiling;
 using Utils;
 
 namespace UnitBased
@@ -59,7 +58,6 @@ namespace UnitBased
             _oldGridPosition = GridPosition;
             GridPosition = _newGridPosition;
             
-            //TODO refactor this to remove lags during move action
             LevelGrid.Instance.UnitMovedGridPosition(this, _oldGridPosition, _newGridPosition);
         }
 

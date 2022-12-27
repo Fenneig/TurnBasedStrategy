@@ -10,6 +10,12 @@ namespace UnitBased
 {
     public class UnitActionSystem : MonoBehaviour
     {
+        public static UnitActionSystem Instance { get; private set; }
+        public event EventHandler OnSelectedUnitChanged;
+        public event EventHandler OnSelectedActionChanged;
+        public event EventHandler OnActionStart;
+        public event EventHandler<bool> OnBusyChanged;
+        
         [SerializeField] private Unit _selectedUnit;
         [SerializeField] private LayerMask _unitLayerMask;
 
@@ -34,14 +40,6 @@ namespace UnitBased
                 OnBusyChanged?.Invoke(this, _isBusy);
             }
         }
-        
-        
-
-        public static UnitActionSystem Instance { get; private set; }
-        public event EventHandler OnSelectedUnitChanged;
-        public event EventHandler OnSelectedActionChanged;
-        public event EventHandler OnActionStart;
-        public event EventHandler<bool> OnBusyChanged;
 
         public Unit SelectedUnit
         {
