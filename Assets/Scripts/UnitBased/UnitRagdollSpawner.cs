@@ -17,11 +17,11 @@ namespace UnitBased
             _health.OnDead += HealthComponent_OnDead;
         }
 
-        private void HealthComponent_OnDead(object sender, EventArgs e)
+        private void HealthComponent_OnDead(object sender, HealthComponent.OnDeadEventArgs e)
         {
             Transform ragdollTransform = Instantiate(_ragdollPrefab, transform.position, transform.rotation);
             UnitRagdoll unitRagdoll = ragdollTransform.GetComponent<UnitRagdoll>();
-            unitRagdoll.Setup(_originalRootBone);
+            unitRagdoll.Setup(_originalRootBone, e.IncomeDamagePosition);
         }
     }
 }

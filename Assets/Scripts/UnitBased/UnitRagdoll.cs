@@ -6,10 +6,11 @@ namespace UnitBased
     {
         [SerializeField] private Transform _ragdollRootBone;
 
-        public void Setup(Transform originalRootBone)
+        public void Setup(Transform originalRootBone, Vector3 incomeDamagePosition)
         {
             MatchAllChildTransforms(originalRootBone, _ragdollRootBone);
-            ApplyExplosionToRagdoll(_ragdollRootBone, 300f, transform.position, 10f);
+            Vector3 damageImpulse = (incomeDamagePosition - transform.position).normalized;
+            ApplyExplosionToRagdoll(_ragdollRootBone, 300f, transform.position + damageImpulse, 10f);
         }
 
         private void MatchAllChildTransforms(Transform root, Transform clone)

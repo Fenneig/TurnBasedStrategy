@@ -1,37 +1,57 @@
 using System;
 using Grid;
 using UnitBased;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Projectiles
 {
     public class GrenadeProjectile : MonoBehaviour
     {
-        private Action _onGrenadeBehaviourComplete;
-        
+        public static EventHandler OnAnyGrenadeExploded;
+
+        [SerializeField] private AnimationCurve _arcYAnimationCurve;
+        [SerializeField] private Transform _grenadeExplosionVFXPrefab;
+        [SerializeField] private TrailRenderer _trailRenderer;
         [SerializeField] private float _moveSpeed = 15f;
         [SerializeField] private float _damageRadius = 4f;
         [SerializeField] private int _damageAmount = 30;
 
         private Vector3 _targetPosition;
+        private Action _onGrenadeBehaviourComplete;
+        private float _totalDistance;
+        private Vector3 _transformPositionXZ;
         
         private void Update()
         {
-            Vector3 moveDirection = (_targetPosition - transform.position).normalized;
-            transform.position += moveDirection * _moveSpeed * Time.deltaTime;
+            Vector3 moveDirection = (_targetPosition - _transformPositionXZ).normalized;
+            _transformPositionXZ += moveDirection * _moveSpeed * Time.deltaTime;
 
             float reachedTargetDistance = .2f;
-            if (Vector3.Distance(transform.position, _targetPosition) < reachedTargetDistance)
+            float distance = Vector3.Distance(_transformPositionXZ, _targetPosition);
+            float distanceNormalized = 1 - distance / _totalDistance;
+
+            float maxHeight = _totalDistance / 3f;
+            float positionY = _arcYAnimationCurve.Evaluate(distanceNormalized) * maxHeight;
+            transform.position = new Vector3(_transformPositionXZ.x, positionY, _transformPositionXZ.z);
+            
+            if (Vector3.Distance(_transformPositionXZ, _targetPosition) < reachedTargetDistance)
             {
                 Collider[] colliderArray = Physics.OverlapSphere(_targetPosition, _damageRadius);
                 foreach (var collider in colliderArray)
                 {
                     if (collider.TryGetComponent(out Unit targetUnit))
                     {
-                        targetUnit.Damage(_damageAmount);
+                        targetUnit.Damage(_damageAmount, transform.position);
                     }
                 }
+
                 _onGrenadeBehaviourComplete?.Invoke();
+                
+                OnAnyGrenadeExploded?.Invoke(this, EventArgs.Empty);
+                
+                Instantiate(_grenadeExplosionVFXPrefab, _targetPosition, quaternion.identity);
+                
                 Destroy(gameObject);
             }
         }
@@ -40,6 +60,10 @@ namespace Projectiles
         {
             _onGrenadeBehaviourComplete = onGrenadeBehaviorComplete;
             _targetPosition = LevelGrid.Instance.GetWorldPosition(targetGridPosition);
+
+            _transformPositionXZ = transform.position;
+            _transformPositionXZ.y = 0;
+            _totalDistance = Vector3.Distance(_transformPositionXZ, _targetPosition);
         }
     }
 }

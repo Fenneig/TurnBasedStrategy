@@ -99,7 +99,7 @@ namespace Actions
                 ShootingUnit = Unit
             });
 
-            _targetUnit.Damage(_damageAmount);
+            _targetUnit.Damage(_damageAmount, Unit.WorldPosition);
         }
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {

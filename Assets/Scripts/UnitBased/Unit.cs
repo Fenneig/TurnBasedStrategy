@@ -81,11 +81,11 @@ namespace UnitBased
             OnAnyActionPointsChanged?.Invoke(this,EventArgs.Empty);
         }
 
-        private void HealthComponent_OnDead(object sender, EventArgs args)
+        private void HealthComponent_OnDead(object sender, EventArgs empty)
         {
             LevelGrid.Instance.RemoveUnitAtGridPosition(GridPosition, this);
-            
-            OnAnyUnitDead?.Invoke(this,EventArgs.Empty);
+
+            OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
             
             Destroy(gameObject);
         }
@@ -106,8 +106,8 @@ namespace UnitBased
             TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
         }
 
-        public void Damage(int damageAmount) =>
-            Health.Damage(damageAmount);
+        public void Damage(int damageAmount, Vector3 incomeDamagePosition) =>
+            Health.Damage(damageAmount, incomeDamagePosition);
 
         public float GetHealthNormalized() =>
             Health.GetHealthNormalized();
