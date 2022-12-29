@@ -187,6 +187,9 @@ namespace Pathfinder
             return gridPositionList;
         }
 
+        public void SetIsWalkableGridPosition(GridPosition gridPosition, bool isWalkable) =>
+            _gridSystem.GetGridObject(gridPosition).IsWalkable = isWalkable;
+
         public bool IsValidGridPosition(GridPosition startGridPosition, GridPosition endGridPosition, int maxDistance)
         {
             int pathfindingDistanceMultiplier = MOVE_STRAIGHT_COST;

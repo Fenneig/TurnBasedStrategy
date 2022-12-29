@@ -1,8 +1,8 @@
 using System;
 using Grid;
-using UnitBased;
 using Unity.Mathematics;
 using UnityEngine;
+using Utils;
 
 namespace Projectiles
 {
@@ -12,7 +12,6 @@ namespace Projectiles
 
         [SerializeField] private AnimationCurve _arcYAnimationCurve;
         [SerializeField] private Transform _grenadeExplosionVFXPrefab;
-        [SerializeField] private TrailRenderer _trailRenderer;
         [SerializeField] private float _moveSpeed = 15f;
         [SerializeField] private float _damageRadius = 4f;
         [SerializeField] private int _damageAmount = 30;
@@ -34,26 +33,29 @@ namespace Projectiles
             float maxHeight = _totalDistance / 3f;
             float positionY = _arcYAnimationCurve.Evaluate(distanceNormalized) * maxHeight;
             transform.position = new Vector3(_transformPositionXZ.x, positionY, _transformPositionXZ.z);
-            
-            if (Vector3.Distance(_transformPositionXZ, _targetPosition) < reachedTargetDistance)
-            {
-                Collider[] colliderArray = Physics.OverlapSphere(_targetPosition, _damageRadius);
-                foreach (var collider in colliderArray)
-                {
-                    if (collider.TryGetComponent(out Unit targetUnit))
-                    {
-                        targetUnit.Damage(_damageAmount, transform.position);
-                    }
-                }
 
-                _onGrenadeBehaviourComplete?.Invoke();
+            if (!(Vector3.Distance(_transformPositionXZ, _targetPosition) < reachedTargetDistance)) return;
+
+            Collider[] colliderArray = new Collider[20];
+            Physics.OverlapSphereNonAlloc(_targetPosition, _damageRadius, colliderArray);
                 
-                OnAnyGrenadeExploded?.Invoke(this, EventArgs.Empty);
+            foreach (var collider in colliderArray)
+            {
+                if (collider == null) continue;
                 
-                Instantiate(_grenadeExplosionVFXPrefab, _targetPosition, quaternion.identity);
-                
-                Destroy(gameObject);
+                if (collider.TryGetComponent(out IDamageable target))
+                {
+                    target.Damage(_damageAmount, transform.position);
+                }
             }
+            
+            _onGrenadeBehaviourComplete?.Invoke();
+                
+            OnAnyGrenadeExploded?.Invoke(this, EventArgs.Empty);
+                
+            Instantiate(_grenadeExplosionVFXPrefab, _targetPosition, quaternion.identity);
+                
+            Destroy(gameObject);
         }
 
         public void Setup(GridPosition targetGridPosition, Action onGrenadeBehaviorComplete)

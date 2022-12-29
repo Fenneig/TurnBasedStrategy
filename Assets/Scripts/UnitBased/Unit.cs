@@ -6,7 +6,7 @@ using Utils;
 
 namespace UnitBased
 {
-    public class Unit : MonoBehaviour
+    public class Unit : MonoBehaviour, IDamageable
     {
         [SerializeField] private int _maxActionPoints = 2;
         [SerializeField] private bool _isEnemy;
