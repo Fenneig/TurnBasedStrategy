@@ -13,7 +13,7 @@ namespace Grid
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                ScreenShake.Instance.Shake(5);
+                Debug.Log(LevelGrid.Instance.GetDoorAtGridPosition(mouseto));
             }
         }
     }

@@ -25,7 +25,8 @@ namespace Grid
             Blue,
             Red,
             Yellow,
-            RedSoft
+            RedSoft,
+            Green
         }
 
         [SerializeField] private Transform _gridSystemVisualSinglePrefab;
@@ -124,7 +125,6 @@ namespace Grid
             
             switch (selectedAction)
             {
-                default:
                 case MoveAction:
                     gridVisualType = GridVisualType.White;
                     break;
@@ -141,6 +141,13 @@ namespace Grid
                     break;
                 case GrenadeAction:
                     gridVisualType = GridVisualType.Yellow;
+                    break;
+                case InteractAction:
+                    gridVisualType = GridVisualType.Green;
+                    break;
+                default:
+                    gridVisualType = GridVisualType.White;
+                    Debug.Log($"There is no such action as \"{selectedAction.ActionName}\"!!!");
                     break;
             }
 

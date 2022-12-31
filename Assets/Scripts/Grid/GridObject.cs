@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnitBased;
+using Utils;
 
 namespace Grid
 {
@@ -8,6 +9,8 @@ namespace Grid
         private GridSystem<GridObject> _gridSystem;
         private GridPosition _gridPosition;
         private List<Unit> _units;
+
+        public Door Door { get; set; }
 
         public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
         {
