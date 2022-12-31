@@ -33,6 +33,8 @@ namespace Actions
         private float _stateTimer;
         private Unit _targetUnit;
         private bool _canShootBullet;
+        private const float UNIT_SHOULDER_HEIGHT = 1.7f;
+
 
         public Unit TargetUnit => _targetUnit;
         public int MaxShootDistance => _maxShootDistance;
@@ -99,7 +101,7 @@ namespace Actions
                 ShootingUnit = Unit
             });
 
-            _targetUnit.Damage(_damageAmount, Unit.WorldPosition);
+            _targetUnit.Damage(_damageAmount, Unit.WorldPosition + Vector3.up * UNIT_SHOULDER_HEIGHT);
         }
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {
@@ -140,9 +142,8 @@ namespace Actions
 
                     Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
                     Vector3 shootDirection = (targetUnit.WorldPosition - unitWorldPosition).normalized;
-                    float unitShoulderHeight = 1.7f;
 
-                    if (Physics.Raycast(unitWorldPosition + Vector3.up * unitShoulderHeight,
+                    if (Physics.Raycast(unitWorldPosition + Vector3.up * UNIT_SHOULDER_HEIGHT,
                         shootDirection,
                         Vector3.Distance(unitWorldPosition, targetUnit.WorldPosition),
                         _obstacleLayerMask)) continue;
