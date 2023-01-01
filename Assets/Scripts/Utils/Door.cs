@@ -26,7 +26,7 @@ namespace Utils
         private void Start()
         {
             _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            LevelGrid.Instance.SetDoorAtGridPosition(_gridPosition, this);
+            LevelGrid.Instance.SetInteractableAtGridPosition(_gridPosition, this);
 
             if (_isOpen) OpenDoor();
             else CloseDoor();

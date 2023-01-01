@@ -19,7 +19,7 @@ namespace Actions
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {
-            LevelGrid.Instance.GetDoorAtGridPosition(gridPosition).Interact(ActionComplete);
+            LevelGrid.Instance.GetInteractableAtGridPosition(gridPosition).Interact(ActionComplete);
             ActionStart(onActionComplete);
         }
 
@@ -35,8 +35,9 @@ namespace Actions
                     GridPosition testGridPosition = Unit.GridPosition + offsetGridPosition;
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
 
-                    Door door = LevelGrid.Instance.GetDoorAtGridPosition(testGridPosition);
-                    if (door == null) continue;
+                    
+                    IInteractable interactable = LevelGrid.Instance.GetInteractableAtGridPosition(testGridPosition);
+                    if (interactable == null) continue;
 
                     validGridPositionList.Add(testGridPosition);
                 }

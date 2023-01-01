@@ -4,6 +4,6 @@ namespace Utils
 {
     public interface IInteractable
     {
-        public void Interact(Action onInteractComplete);
+        void Interact(Action onInteractComplete);
     }
 }

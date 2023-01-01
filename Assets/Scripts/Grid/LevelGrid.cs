@@ -80,11 +80,11 @@ namespace Grid
         public Unit GetUnitAtGridPosition(GridPosition gridPosition) =>
             _gridSystem.GetGridObject(gridPosition).GetUnit();
 
-        public Door GetDoorAtGridPosition(GridPosition gridPosition) => 
-            _gridSystem.GetGridObject(gridPosition).Door;
-        
-        public Door SetDoorAtGridPosition(GridPosition gridPosition, Door door) =>
-            _gridSystem.GetGridObject(gridPosition).Door = door;
+        public IInteractable GetInteractableAtGridPosition(GridPosition gridPosition) =>
+            _gridSystem.GetGridObject(gridPosition).IInteractable;
+
+        public void SetInteractableAtGridPosition(GridPosition gridPosition, IInteractable interactable) =>
+            _gridSystem.GetGridObject(gridPosition).IInteractable = interactable;
 
     }
 }

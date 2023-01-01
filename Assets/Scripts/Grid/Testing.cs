@@ -11,10 +11,6 @@ namespace Grid
     {
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                Debug.Log(LevelGrid.Instance.GetDoorAtGridPosition(mouseto));
-            }
         }
     }
 }

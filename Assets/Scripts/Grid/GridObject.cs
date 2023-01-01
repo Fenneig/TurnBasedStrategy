@@ -10,7 +10,7 @@ namespace Grid
         private GridPosition _gridPosition;
         private List<Unit> _units;
 
-        public Door Door { get; set; }
+        public IInteractable IInteractable { get; set; }
 
         public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
         {
