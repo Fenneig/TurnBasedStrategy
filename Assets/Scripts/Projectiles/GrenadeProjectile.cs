@@ -28,7 +28,7 @@ namespace Projectiles
 
             float reachedTargetDistance = .2f;
             float distance = Vector3.Distance(_transformPositionXZ, _targetPosition);
-            float distanceNormalized = 1 - distance / _totalDistance;
+            float distanceNormalized = _totalDistance == 0 ? 0 : 1 - distance / _totalDistance;
 
             float maxHeight = _totalDistance / 3f;
             float positionY = _arcYAnimationCurve.Evaluate(distanceNormalized) * maxHeight;

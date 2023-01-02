@@ -20,6 +20,7 @@ namespace UnitBased
         [SerializeField] private LayerMask _unitLayerMask;
 
         private BaseAction _selectedAction;
+        private Camera _mainCamera;
 
         public BaseAction SelectedAction
         {
@@ -55,6 +56,7 @@ namespace UnitBased
         private void Awake()
         {
             Instance ??= this;
+            _mainCamera = Camera.main;
         }
 
         private void Start()
@@ -74,8 +76,8 @@ namespace UnitBased
 
         private bool TryHandleUnitSelection()
         {
-            if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return false;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (!InputManager.Instance.IsMouseButtonDownThisFrame) return false;
+            var ray = _mainCamera.ScreenPointToRay(InputManager.Instance.MouseScreenPosition);
             if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _unitLayerMask)) return false;
             if (!hit.collider.gameObject.TryGetComponent(out Unit unit)) return false;
             if (unit.IsEnemy) return false; 
@@ -87,7 +89,7 @@ namespace UnitBased
 
         private void HandleSelectedAction()
         {
-            if (!Input.GetMouseButtonDown((int) MouseButton.Left)) return;
+            if (!InputManager.Instance.IsMouseButtonDownThisFrame) return;
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
             if (!SelectedAction.IsValidActionGridPosition(mouseGridPosition)) return;
             if (!SelectedUnit.TrySpendActionPointsToTakeAction(SelectedAction)) return;
