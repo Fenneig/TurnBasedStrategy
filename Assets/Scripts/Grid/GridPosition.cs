@@ -4,8 +4,8 @@ namespace Grid
 {
     public struct GridPosition : IEquatable<GridPosition>
     {
-        public int X;
-        public int Z;
+        public int X { get; }
+        public int Z { get; }
 
         public GridPosition(int x, int z)
         {

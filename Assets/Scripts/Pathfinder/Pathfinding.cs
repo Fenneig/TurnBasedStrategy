@@ -8,16 +8,13 @@ namespace Pathfinder
     {
         public static Pathfinding Instance { get; private set; }
 
-        private const int MOVE_STRAIGHT_COST = 10;
-        private const int MOVE_DIAGONAL_COST = 14;
+        public const int MOVE_STRAIGHT_COST = 10;
+        public const int MOVE_DIAGONAL_COST = 14;
 
 
         [SerializeField] private Transform _gridDebugObjectPrefab;
         [SerializeField] private LayerMask _obstacleLayerMask;
         [SerializeField] private bool _createDebugObjects;
-        private int _width;
-        private int _height;
-        private float _cellSize;
         private GridSystem<PathNode> _gridSystem;
 
         private void Awake()
@@ -27,10 +24,6 @@ namespace Pathfinder
 
         public void Setup(int width, int height, float cellSize)
         {
-            _width = width;
-            _height = height;
-            _cellSize = cellSize;
-
             _gridSystem =
                 new GridSystem<PathNode>(width, height, cellSize, (system, position) => new PathNode(position));
 
@@ -51,7 +44,6 @@ namespace Pathfinder
             }
         }
 
-        //TODO refactor this to remove lags during move action
         public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition,
             out int pathLength)
         {
@@ -147,7 +139,7 @@ namespace Pathfinder
             return _gridSystem.GetGridObject(new GridPosition(x, z));
         }
 
-        public int CalculateDistance(GridPosition gridPositionA, GridPosition gridPositionB)
+        private int CalculateDistance(GridPosition gridPositionA, GridPosition gridPositionB)
         {
             GridPosition gridPositionDistance = gridPositionA - gridPositionB;
             int distanceX = Mathf.Abs(gridPositionDistance.X);
@@ -190,12 +182,16 @@ namespace Pathfinder
         public void SetIsWalkableGridPosition(GridPosition gridPosition, bool isWalkable) =>
             _gridSystem.GetGridObject(gridPosition).IsWalkable = isWalkable;
 
-        public bool IsValidGridPosition(GridPosition startGridPosition, GridPosition endGridPosition, int maxDistance)
+        public bool IsWalkableGridPosition(GridPosition gridPosition) =>
+            _gridSystem.GetGridObject(gridPosition).IsWalkable;
+
+        public bool HasPath(GridPosition startGridPosition, GridPosition endGridPosition) =>
+            FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
+
+        public int GetPathLength(GridPosition startGridPosition, GridPosition endGridPosition)
         {
-            int pathfindingDistanceMultiplier = MOVE_STRAIGHT_COST;
-            bool hasPath = FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
-            return _gridSystem.GetGridObject(endGridPosition).IsWalkable && hasPath &&
-                   pathLength <= maxDistance * pathfindingDistanceMultiplier;
+            FindPath(startGridPosition, endGridPosition, out int pathLength);
+            return pathLength;
         }
     }
 }

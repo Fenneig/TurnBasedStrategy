@@ -66,20 +66,22 @@ namespace Actions
         public override List<GridPosition> GetValidActionGridPositionList()
         {
             List<GridPosition> validGridPositionList = new List<GridPosition>();
-            GridPosition unitGridPosition = Unit.GridPosition;
 
             for (int x = -_maxMoveDistance; x <= _maxMoveDistance; x++)
             {
                 for (int z = -_maxMoveDistance; z <= _maxMoveDistance; z++)
                 {
                     GridPosition offsetGridPosition = new GridPosition(x, z);
-                    GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+                    GridPosition testGridPosition = Unit.GridPosition + offsetGridPosition;
 
 
+                    int pathfindingDistanceMultiplier = Pathfinding.MOVE_STRAIGHT_COST;
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition) ||
                         LevelGrid.Instance.HasAnyUnit(testGridPosition) ||
-                        unitGridPosition == testGridPosition ||
-                        !Pathfinding.Instance.IsValidGridPosition(unitGridPosition, testGridPosition, _maxMoveDistance))
+                        Unit.GridPosition == testGridPosition ||
+                        !Pathfinding.Instance.IsWalkableGridPosition(testGridPosition) ||
+                        !Pathfinding.Instance.HasPath(Unit.GridPosition, testGridPosition) ||
+                        Pathfinding.Instance.GetPathLength(Unit.GridPosition, testGridPosition) > _maxMoveDistance * pathfindingDistanceMultiplier)
                         continue;
 
                     validGridPositionList.Add(testGridPosition);
