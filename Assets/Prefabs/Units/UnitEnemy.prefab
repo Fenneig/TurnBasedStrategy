@@ -12,6 +12,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6501140434225576092, guid: 15cba7fd18c7c484fbb329096f88f572,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6501140434225576094, guid: 15cba7fd18c7c484fbb329096f88f572,
         type: 3}
       propertyPath: _isEnemy

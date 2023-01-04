@@ -14,7 +14,6 @@ namespace Grid
         public event EventHandler OnAnyUnitMovedGridPosition;
         
         
-        [SerializeField] private Transform _gridDebugObjectPrefab;
         [SerializeField] private int _width = 10;
         [SerializeField] private int _height = 10;
         [SerializeField] private float _cellSize = 2f;

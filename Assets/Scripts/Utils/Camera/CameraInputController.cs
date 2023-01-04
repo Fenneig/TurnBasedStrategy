@@ -18,7 +18,7 @@ namespace Utils.Camera
             _cinemachineTransposer = _camera.GetCinemachineComponent<CinemachineTransposer>();
             _targetFollowOffset = _cinemachineTransposer.m_FollowOffset;
         }
-
+        
         private void Update()
         {
             HandleMovement();

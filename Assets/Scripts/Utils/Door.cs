@@ -2,6 +2,7 @@
 using Grid;
 using Pathfinder;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Utils
 {
@@ -9,6 +10,7 @@ namespace Utils
     public class Door : MonoBehaviour, IInteractable
     {
         [SerializeField] private bool _isOpen;
+        [SerializeField] private UnityEvent _onOpenEvent;
 
         private Animator _animator;
 
@@ -59,8 +61,11 @@ namespace Utils
             UpdateDoor();
         }
 
-        private void OpenDoor() =>
+        private void OpenDoor()
+        {
             _isOpen = true;
+            _onOpenEvent?.Invoke();
+        }
 
 
         private void CloseDoor() =>
