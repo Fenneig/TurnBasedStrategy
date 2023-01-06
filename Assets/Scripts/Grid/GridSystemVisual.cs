@@ -114,7 +114,7 @@ namespace Grid
         }
 
 
-        public void UpdateGridVisual()
+        private void UpdateGridVisual()
         {
             HideAllGridPosition();
             
