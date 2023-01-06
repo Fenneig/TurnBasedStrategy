@@ -34,8 +34,6 @@ namespace Grid
         [SerializeField] private List<GridVisualTypeMaterial> _gridVisualTypeMaterialList;
 
         private GridSystemVisualSingle[,] _gridSystemVisualSingleArray;
-        private GridSystemVisualSingle _lastSelectedGridSystemVisualSingle;
-
 
         private void Awake()
         {
@@ -64,26 +62,6 @@ namespace Grid
             LevelGrid.Instance.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
 
             UpdateGridVisual();
-
-            for (int x = 0; x < LevelGrid.Instance.Width; x++)
-            {
-                for (int z = 0; z < LevelGrid.Instance.Height; z++)
-                {
-                    _gridSystemVisualSingleArray[x,z].Show(GetGridVisualTypeMaterial(GridVisualType.White));
-                }
-            }
-        }
-
-        private void Update()
-        {
-            if (_lastSelectedGridSystemVisualSingle != null) _lastSelectedGridSystemVisualSingle.HideSelected();
-            
-            GridPosition gridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-            if (LevelGrid.Instance.IsValidGridPosition(gridPosition))
-                _lastSelectedGridSystemVisualSingle = _gridSystemVisualSingleArray[gridPosition.X, gridPosition.Z];
-            
-            if (_lastSelectedGridSystemVisualSingle != null) _lastSelectedGridSystemVisualSingle.ShowSelected();
-
         }
 
         private void HideAllGridPosition()
