@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -36,13 +38,41 @@ namespace Grid
 
         public Vector3 GetWorldPosition(GridPosition gridPosition) =>
             (new Vector3(gridPosition.X, 0, gridPosition.Z * HEX_VERTICAL_OFFSET_MULTIPLIER) +
-            (gridPosition.Z % 2 == 1 ? new Vector3(1, 0, 0) * HEX_HORIZONTAL_ODD_OFFSET : Vector3.zero)) * _cellSize;
+             (gridPosition.Z % 2 == 1 ? new Vector3(1, 0, 0) * HEX_HORIZONTAL_ODD_OFFSET : Vector3.zero)) * _cellSize;
 
 
-        public GridPosition GetGridPosition(Vector3 worldPosition) =>
-            new(Mathf.RoundToInt(worldPosition.x / _cellSize),
-                Mathf.RoundToInt(worldPosition.z / _cellSize));
+        public GridPosition GetGridPosition(Vector3 worldPosition)
+        {
+            GridPosition roughXZ = new(
+                Mathf.RoundToInt(worldPosition.x / _cellSize),
+                Mathf.RoundToInt(worldPosition.z / _cellSize / HEX_VERTICAL_OFFSET_MULTIPLIER)
+            );
 
+            bool oddRow = roughXZ.Z % 2 == 1;
+
+            List<GridPosition> neighbourGridPositionList = new List<GridPosition>
+            {
+                roughXZ + new GridPosition(+1, 0),
+                roughXZ + new GridPosition(-1, 0),
+
+                roughXZ + new GridPosition(0, +1),
+                roughXZ + new GridPosition(0, -1),
+
+                roughXZ + new GridPosition(oddRow ? +1 : -1, +1),
+                roughXZ + new GridPosition(oddRow ? +1 : -1, -1)
+            };
+
+            GridPosition closestGridPosition = roughXZ;
+
+            foreach (var neighbourGridPosition in neighbourGridPositionList)
+            {
+                if (Vector3.Distance(worldPosition, GetWorldPosition(neighbourGridPosition)) <
+                    Vector3.Distance(worldPosition, GetWorldPosition(closestGridPosition)))
+                    closestGridPosition = neighbourGridPosition;
+            }
+
+            return closestGridPosition;
+        }
 
         public void CreateDebugObjects(Transform debugPrefab, Transform parentTransform)
         {
@@ -51,9 +81,11 @@ namespace Grid
                 for (int z = 0; z < _height; z++)
                 {
                     GridPosition gridPosition = new GridPosition(x, z);
+
                     Transform debugTransform =
                         GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity,
                             parentTransform);
+
                     GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
                     gridDebugObject.SetGridObject(_gridObjectArray[x, z]);
                 }
