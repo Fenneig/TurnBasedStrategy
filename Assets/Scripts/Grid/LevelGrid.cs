@@ -19,7 +19,7 @@ namespace Grid
         [SerializeField] private float _cellSize = 2f;
         
         
-        private GridSystem<GridObject> _gridSystem;
+        private GridSystemHex<GridObject> _gridSystemHex;
         
         
         public int Width => _width;
@@ -36,7 +36,7 @@ namespace Grid
 
             Instance = this;
 
-            _gridSystem = new GridSystem<GridObject>(_width, _height, _cellSize,
+            _gridSystemHex = new GridSystemHex<GridObject>(_width, _height, _cellSize,
                 (system, position) => new GridObject(system, position));
         }
 
@@ -46,16 +46,16 @@ namespace Grid
         }
 
         public void AddUnitAtGridPosition(GridPosition position, Unit unit) =>
-            _gridSystem.GetGridObject(position).AddUnit(unit);
+            _gridSystemHex.GetGridObject(position).AddUnit(unit);
 
         public void RemoveUnitAtGridPosition(GridPosition position, Unit unit) =>
-            _gridSystem.GetGridObject(position).RemoveUnit(unit);
+            _gridSystemHex.GetGridObject(position).RemoveUnit(unit);
 
         public GridPosition GetGridPosition(Vector3 worldPosition) =>
-            _gridSystem.GetGridPosition(worldPosition);
+            _gridSystemHex.GetGridPosition(worldPosition);
 
         public Vector3 GetWorldPosition(GridPosition gridPosition) =>
-            _gridSystem.GetWorldPosition(gridPosition);
+            _gridSystemHex.GetWorldPosition(gridPosition);
 
         public void UnitMovedGridPosition(Unit unit, GridPosition fromGridPosition, GridPosition toGridPosition)
         {
@@ -65,19 +65,19 @@ namespace Grid
         }
 
         public bool IsValidGridPosition(GridPosition gridPosition) =>
-            _gridSystem.IsValidGridPosition(gridPosition);
+            _gridSystemHex.IsValidGridPosition(gridPosition);
 
         public bool HasAnyUnit(GridPosition gridPosition) =>
-            _gridSystem.GetGridObject(gridPosition).HasAnyUnit();
+            _gridSystemHex.GetGridObject(gridPosition).HasAnyUnit();
 
         public Unit GetUnitAtGridPosition(GridPosition gridPosition) =>
-            _gridSystem.GetGridObject(gridPosition).GetUnit();
+            _gridSystemHex.GetGridObject(gridPosition).GetUnit();
 
         public IInteractable GetInteractableAtGridPosition(GridPosition gridPosition) =>
-            _gridSystem.GetGridObject(gridPosition).IInteractable;
+            _gridSystemHex.GetGridObject(gridPosition).IInteractable;
 
         public void SetInteractableAtGridPosition(GridPosition gridPosition, IInteractable interactable) =>
-            _gridSystem.GetGridObject(gridPosition).IInteractable = interactable;
+            _gridSystemHex.GetGridObject(gridPosition).IInteractable = interactable;
 
     }
 }

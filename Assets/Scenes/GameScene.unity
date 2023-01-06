@@ -275,7 +275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &132832487
 Transform:
   m_ObjectHideFlags: 0
@@ -739,17 +739,17 @@ MonoBehaviour:
     type: 3}
   _gridVisualTypeMaterialList:
   - _gridVisualType: 0
-    _material: {fileID: 2100000, guid: 4c22d6cc3765fef4ca17cc1ba4b8a110, type: 2}
+    _material: {fileID: 2100000, guid: 89c1a298566978e47b87d0ad2f985c8e, type: 2}
   - _gridVisualType: 1
-    _material: {fileID: 2100000, guid: f0d27d21faea9e64b8d13a2c05be1bbb, type: 2}
+    _material: {fileID: 2100000, guid: 3f84f56fb65c001449f7e20a0bd951a4, type: 2}
   - _gridVisualType: 2
-    _material: {fileID: 2100000, guid: 2c4d9200581a3d04d98faa31c4cf2b7f, type: 2}
+    _material: {fileID: 2100000, guid: b69eec659568e6d4a8ba7dcf415dcba5, type: 2}
   - _gridVisualType: 3
-    _material: {fileID: 2100000, guid: cb62a68fde7adfd4aab75cf857d3c094, type: 2}
+    _material: {fileID: 2100000, guid: fb46426885bbb724395425dbd524394d, type: 2}
   - _gridVisualType: 4
-    _material: {fileID: 2100000, guid: 7c5898b176a590e478727f2d63ff87ba, type: 2}
+    _material: {fileID: 2100000, guid: bd974d2d795bb82418ec9fff37207058, type: 2}
   - _gridVisualType: 5
-    _material: {fileID: 2100000, guid: db004a1b7bc66344e934d603eb17361e, type: 2}
+    _material: {fileID: 2100000, guid: d9faafa26111f244fa57f905c6e587ae, type: 2}
 --- !u!4 &199284457
 Transform:
   m_ObjectHideFlags: 0
@@ -1156,7 +1156,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.28319317, y: -0.320168, z: 0.10092407, w: 0.89839214}
+  m_LocalRotation: {x: 0.28319314, y: -0.32016802, z: 0.100924075, w: 0.89839214}
   m_LocalPosition: {x: 14.324348, y: 7, z: -3.7461362}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2935,7 +2935,7 @@ PrefabInstance:
     - target: {fileID: 4707282032213063043, guid: c5d7e013a29df0842ab7e04ad4c1cb98,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5d7e013a29df0842ab7e04ad4c1cb98, type: 3}
@@ -2992,7 +2992,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2425c03ff18262a4eaa45371f0fe6dcf, type: 2}
+  - {fileID: 2100000, guid: c9dd08005acd2a34d8e218592d665d0b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3030,8 +3030,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 907813750}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.1421, y: -0, z: 19.8678}
-  m_LocalScale: {x: 13.228001, y: 1, z: 13.974}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 10, y: 1, z: 7.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3631,7 +3631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sphere: {fileID: 1740570151}
-  _rotationSpeed: 20
+  _rotationSpeed: 30
 --- !u!1 &1079652138
 GameObject:
   m_ObjectHideFlags: 0
@@ -5308,7 +5308,7 @@ PrefabInstance:
     - target: {fileID: 4707282032213063043, guid: c5d7e013a29df0842ab7e04ad4c1cb98,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5d7e013a29df0842ab7e04ad4c1cb98, type: 3}
@@ -6439,7 +6439,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671342538}
-  m_LocalRotation: {x: 0.28319317, y: -0.320168, z: 0.10092407, w: 0.89839214}
+  m_LocalRotation: {x: 0.28319314, y: -0.32016802, z: 0.100924075, w: 0.89839214}
   m_LocalPosition: {x: 14.324348, y: 7, z: -3.7461362}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6892,7 +6892,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1784270370
 Transform:
   m_ObjectHideFlags: 0

@@ -6,15 +6,15 @@ namespace Grid
 {
     public class GridObject
     {
-        private GridSystem<GridObject> _gridSystem;
+        private GridSystemHex<GridObject> _gridSystemHex;
         private GridPosition _gridPosition;
         private List<Unit> _units;
 
         public IInteractable IInteractable { get; set; }
 
-        public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
+        public GridObject(GridSystemHex<GridObject> gridSystemHex, GridPosition gridPosition)
         {
-            _gridSystem = gridSystem;
+            _gridSystemHex = gridSystemHex;
             _gridPosition = gridPosition;
             _units = new List<Unit>();
         }

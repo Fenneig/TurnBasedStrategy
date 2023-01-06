@@ -4,8 +4,10 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class GridSystem<TGridObject>
+    public class GridSystemHex<TGridObject>
     {
+        private const float HEX_VERTICAL_OFFSET_MULTIPLIER = .75f;
+        private const float HEX_HORIZONTAL_ODD_OFFSET = .5f;
         private int _width;
         private int _height;
         private readonly float _cellSize;
@@ -14,7 +16,8 @@ namespace Grid
         public int Width => _width;
         public int Height => _height;
 
-        public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+        public GridSystemHex(int width, int height, float cellSize,
+            Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject)
         {
             _width = width;
             _height = height;
@@ -30,15 +33,16 @@ namespace Grid
                 }
             }
         }
-        
-        public Vector3 GetWorldPosition(GridPosition gridPosition) =>
-            new Vector3(gridPosition.X, 0, gridPosition.Z) * _cellSize;
 
-        public GridPosition GetGridPosition(Vector3 worldPosition)
-        {
-            return new GridPosition(Mathf.RoundToInt(worldPosition.x / _cellSize),
+        public Vector3 GetWorldPosition(GridPosition gridPosition) =>
+            (new Vector3(gridPosition.X, 0, gridPosition.Z * HEX_VERTICAL_OFFSET_MULTIPLIER) +
+            (gridPosition.Z % 2 == 1 ? new Vector3(1, 0, 0) * HEX_HORIZONTAL_ODD_OFFSET : Vector3.zero)) * _cellSize;
+
+
+        public GridPosition GetGridPosition(Vector3 worldPosition) =>
+            new(Mathf.RoundToInt(worldPosition.x / _cellSize),
                 Mathf.RoundToInt(worldPosition.z / _cellSize));
-        }
+
 
         public void CreateDebugObjects(Transform debugPrefab, Transform parentTransform)
         {
@@ -48,7 +52,8 @@ namespace Grid
                 {
                     GridPosition gridPosition = new GridPosition(x, z);
                     Transform debugTransform =
-                        GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity, parentTransform);
+                        GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity,
+                            parentTransform);
                     GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
                     gridDebugObject.SetGridObject(_gridObjectArray[x, z]);
                 }

@@ -62,6 +62,14 @@ namespace Grid
             LevelGrid.Instance.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
 
             UpdateGridVisual();
+
+            for (int x = 0; x < LevelGrid.Instance.Width; x++)
+            {
+                for (int z = 0; z < LevelGrid.Instance.Height; z++)
+                {
+                    _gridSystemVisualSingleArray[x,z].Show(GetGridVisualTypeMaterial(GridVisualType.White));
+                }
+            }
         }
 
         private void HideAllGridPosition()
