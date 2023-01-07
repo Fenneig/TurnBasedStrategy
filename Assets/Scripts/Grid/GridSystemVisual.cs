@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Actions;
+using Pathfinder;
 using UnitBased;
 using UnityEngine;
-using Utils;
 
 namespace Grid
 {
@@ -90,14 +90,19 @@ namespace Grid
         private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
         {
             List<GridPosition> gridPositionList = new List<GridPosition>();
+            bool oddRow = gridPosition.Z % 2 == 1;
             for (int x = -range; x <= range; x++)
             {
                 for (int z = -range; z <= range; z++)
                 {
-                    int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                    if (testDistance > range) continue;
+                    if (range == 1)
+                    {
+                        if (oddRow && x == -1 && z is -1 or +1) continue;
+                        if (!oddRow && x == +1 && z is -1 or +1) continue;
+                    }
                     GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
+                    if (Pathfinding.Instance.GetPathLength(gridPosition, testGridPosition) > range * Pathfinding.MOVE_STRAIGHT_COST) continue;
 
                     gridPositionList.Add(testGridPosition);
                 }
@@ -130,7 +135,7 @@ namespace Grid
                     break;
                 case SwordAction swordAction:
                     gridVisualType = GridVisualType.Red;
-                    ShowGridPositionRangeSquare(selectedUnit.GridPosition,swordAction.MaxSwordDistance, GridVisualType.RedSoft);
+                    ShowGridPositionRange(selectedUnit.GridPosition,swordAction.MaxSwordDistance, GridVisualType.RedSoft);
                     break;
                 case ShootAction shootAction:
                     ShowGridPositionRange(selectedUnit.GridPosition, shootAction.MaxShootDistance, GridVisualType.RedSoft);

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Pathfinder;
 using UnitBased;
 using UnityEngine;
@@ -74,10 +73,10 @@ namespace Grid
             _gridSystemHex.GetGridObject(gridPosition).GetUnit();
 
         public IInteractable GetInteractableAtGridPosition(GridPosition gridPosition) =>
-            _gridSystemHex.GetGridObject(gridPosition).IInteractable;
+            _gridSystemHex.GetGridObject(gridPosition).Interactable;
 
         public void SetInteractableAtGridPosition(GridPosition gridPosition, IInteractable interactable) =>
-            _gridSystemHex.GetGridObject(gridPosition).IInteractable = interactable;
+            _gridSystemHex.GetGridObject(gridPosition).Interactable = interactable;
 
     }
 }

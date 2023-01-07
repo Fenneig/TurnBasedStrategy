@@ -12,12 +12,12 @@ namespace Utils
         public void Reveal()
         {
             if (_isRevealed) return;
-        
+
             foreach (var fogOfWar in _fogOfWarList)
-                fogOfWar.SetActive(false);
+                if (fogOfWar != null) fogOfWar.SetActive(false);
 
             foreach (var enemy in _enemyList)
-                enemy.SetActive(true);
+                if (enemy != null) enemy.SetActive(true);
         
             _isRevealed = true;
         }

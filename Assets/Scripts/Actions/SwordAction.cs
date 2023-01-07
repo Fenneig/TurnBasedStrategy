@@ -84,11 +84,17 @@ namespace Actions
         public override List<GridPosition> GetValidActionGridPositionList()
         {
             List<GridPosition> validGridPositionList = new List<GridPosition>();
-
+            bool oddRow = Unit.GridPosition.Z % 2 == 1;
             for (int x = -_maxSwordDistance; x <= _maxSwordDistance; x++)
             {
                 for (int z = -_maxSwordDistance; z <= _maxSwordDistance; z++)
                 {
+                    //TODO убрать этот костыль, сейчас я не знаю как это сделать :(
+                    if (_maxSwordDistance == 1)
+                    {
+                        if (oddRow && x == -1 && z is -1 or +1) continue;
+                        if (!oddRow && x == +1 && z is -1 or +1) continue;
+                    }
                     GridPosition offsetGridPosition = new GridPosition(x, z);
                     GridPosition testGridPosition = Unit.GridPosition + offsetGridPosition;
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;

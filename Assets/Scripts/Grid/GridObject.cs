@@ -10,7 +10,7 @@ namespace Grid
         private GridPosition _gridPosition;
         private List<Unit> _units;
 
-        public IInteractable IInteractable { get; set; }
+        public IInteractable Interactable { get; set; }
 
         public GridObject(GridSystemHex<GridObject> gridSystemHex, GridPosition gridPosition)
         {

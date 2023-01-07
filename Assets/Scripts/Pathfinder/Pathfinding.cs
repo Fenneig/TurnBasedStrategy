@@ -9,13 +9,11 @@ namespace Pathfinder
         public static Pathfinding Instance { get; private set; }
 
         public const int MOVE_STRAIGHT_COST = 10;
-        public const int MOVE_DIAGONAL_COST = 14;
-
 
         [SerializeField] private Transform _gridDebugObjectPrefab;
         [SerializeField] private LayerMask _obstacleLayerMask;
         [SerializeField] private bool _createDebugObjects;
-        private GridSystemHex<PathNode> _gridSystemHex;
+        private GridSystemHex<PathNode> _gridSystem;
 
         private void Awake()
         {
@@ -24,10 +22,10 @@ namespace Pathfinder
 
         public void Setup(int width, int height, float cellSize)
         {
-            _gridSystemHex =
-                new GridSystemHex<PathNode>(width, height, cellSize, (system, position) => new PathNode(position));
+            _gridSystem = new GridSystemHex<PathNode>(width, height, cellSize, (system, position) =>
+                new PathNode(position));
 
-            if (_createDebugObjects) _gridSystemHex.CreateDebugObjects(_gridDebugObjectPrefab, transform);
+            if (_createDebugObjects) _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab, transform);
 
             for (int x = 0; x < width; x++)
             {
@@ -50,15 +48,15 @@ namespace Pathfinder
             List<PathNode> openList = new List<PathNode>();
             List<PathNode> closeList = new List<PathNode>();
 
-            PathNode startNode = _gridSystemHex.GetGridObject(startGridPosition);
-            PathNode endNode = _gridSystemHex.GetGridObject(endGridPosition);
+            PathNode startNode = _gridSystem.GetGridObject(startGridPosition);
+            PathNode endNode = _gridSystem.GetGridObject(endGridPosition);
             openList.Add(startNode);
-            for (int x = 0; x < _gridSystemHex.Width; x++)
+            for (int x = 0; x < _gridSystem.Width; x++)
             {
-                for (int z = 0; z < _gridSystemHex.Height; z++)
+                for (int z = 0; z < _gridSystem.Height; z++)
                 {
                     GridPosition gridPosition = new GridPosition(x, z);
-                    PathNode pathNode = _gridSystemHex.GetGridObject(gridPosition);
+                    PathNode pathNode = _gridSystem.GetGridObject(gridPosition);
 
                     pathNode.GCost = int.MaxValue;
                     pathNode.HCost = 0;
@@ -67,7 +65,7 @@ namespace Pathfinder
             }
 
             startNode.GCost = 0;
-            startNode.HCost = CalculateDistance(startGridPosition, endGridPosition);
+            startNode.HCost = CalculateHeuristicDistance(startGridPosition, endGridPosition);
 
             while (openList.Count > 0)
             {
@@ -92,14 +90,13 @@ namespace Pathfinder
                         continue;
                     }
 
-                    int tentativeGCost = currentNode.GCost +
-                                         CalculateDistance(currentNode.GridPosition, neighbourNode.GridPosition);
+                    int tentativeGCost = currentNode.GCost + MOVE_STRAIGHT_COST;
 
                     if (tentativeGCost < neighbourNode.GCost)
                     {
                         neighbourNode.CameFromPathNode = currentNode;
                         neighbourNode.GCost = tentativeGCost;
-                        neighbourNode.HCost = CalculateDistance(neighbourNode.GridPosition, endGridPosition);
+                        neighbourNode.HCost = CalculateHeuristicDistance(neighbourNode.GridPosition, endGridPosition);
 
                         if (!openList.Contains(neighbourNode))
                         {
@@ -118,35 +115,30 @@ namespace Pathfinder
         {
             List<PathNode> neighbourList = new List<PathNode>();
 
-            GridPosition gridPosition = currentNode.GridPosition;
+            GridPosition currentNodeGridPosition = currentNode.GridPosition;
 
+            bool oddRow = currentNodeGridPosition.Z % 2 == 1;
             for (int x = -1; x <= 1; x++)
             {
-                if (gridPosition.X + x < 0 || gridPosition.X + x >= _gridSystemHex.Width) continue;
                 for (int z = -1; z <= 1; z++)
                 {
-                    if (gridPosition.Z + z < 0 || gridPosition.Z + z >= _gridSystemHex.Height) continue;
+                    if (oddRow && x == -1 && z is -1 or +1) continue;
+                    if (!oddRow && x == +1 && z is -1 or +1) continue;
 
-                    neighbourList.Add(GetNode(gridPosition.X + x, gridPosition.Z + z));
+                    if (!_gridSystem.IsValidGridPosition(currentNodeGridPosition + new GridPosition(x, z))) continue;
+                    neighbourList.Add(GetNode(currentNodeGridPosition.X + x, currentNodeGridPosition.Z + z));
                 }
             }
 
             return neighbourList;
         }
 
-        private PathNode GetNode(int x, int z)
-        {
-            return _gridSystemHex.GetGridObject(new GridPosition(x, z));
-        }
+        private PathNode GetNode(int x, int z) =>
+            _gridSystem.GetGridObject(new GridPosition(x, z));
 
-        private int CalculateDistance(GridPosition gridPositionA, GridPosition gridPositionB)
-        {
-            GridPosition gridPositionDistance = gridPositionA - gridPositionB;
-            int distanceX = Mathf.Abs(gridPositionDistance.X);
-            int distanceZ = Mathf.Abs(gridPositionDistance.Z);
-            int remaining = Mathf.Abs(distanceX - distanceZ);
-            return MOVE_DIAGONAL_COST * Mathf.Min(distanceX, distanceZ) + MOVE_STRAIGHT_COST * remaining;
-        }
+        public int CalculateHeuristicDistance(GridPosition gridPositionA, GridPosition gridPositionB) =>
+            Mathf.RoundToInt(MOVE_STRAIGHT_COST * Vector3.Distance(_gridSystem.GetWorldPosition(gridPositionA),
+                _gridSystem.GetWorldPosition(gridPositionB)));
 
         private PathNode GetLowestFCostPathNode(List<PathNode> pathNodeList)
         {
@@ -180,10 +172,10 @@ namespace Pathfinder
         }
 
         public void SetIsWalkableGridPosition(GridPosition gridPosition, bool isWalkable) =>
-            _gridSystemHex.GetGridObject(gridPosition).IsWalkable = isWalkable;
+            _gridSystem.GetGridObject(gridPosition).IsWalkable = isWalkable;
 
         public bool IsWalkableGridPosition(GridPosition gridPosition) =>
-            _gridSystemHex.GetGridObject(gridPosition).IsWalkable;
+            _gridSystem.GetGridObject(gridPosition).IsWalkable;
 
         public bool HasPath(GridPosition startGridPosition, GridPosition endGridPosition) =>
             FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
